@@ -1,0 +1,228 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: '__Inter_dbf9c5', '__Inter_Fallback_dbf9c5';
+    background-image: url('Mangrove.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center center;
+    color: #f0f4f1;
+    line-height: 1.6;
+}
+
+.header {
+    background: linear-gradient(135deg, #325947, #325947);
+    color: #f0f4f1;
+    padding: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    font-family: 'Georgia', serif;
+}
+
+.header-text {
+    flex-grow: 1;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+    font-size: 2.5rem;
+    text-shadow: 1px 1px 2px #2f4f2f;
+}
+
+.header p {
+    margin: 0.5rem 0 0;
+    font-size: 1.3rem;
+    font-style: italic;
+}
+
+.container {
+    flex: 1;
+    padding: 2rem 2rem 4rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    overflow-y: auto;
+}
+
+.card {
+    background-color: #325947;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px #325947;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f4f1;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 16px rgba(46, 61, 26, 0.4);
+}
+
+.gauge-container {
+    display: flex;
+    justify-content: space-around;
+    gap: 2rem;
+    flex-wrap: wrap;
+}
+
+.gauge {
+    width: 180px;
+    height: 140px;
+    margin: 10px auto;
+}
+
+.chart-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 2rem;
+}
+
+.chart-container .card {
+    flex: 1 1 30%;
+    min-width: 200px;
+}
+
+canvas {
+    width: 100%;
+    max-height: 300px;
+    background-color: #f4e6e6;
+    border-radius: 8px;
+    box-shadow: inset 0 0 10px #c4d3a4;
+}
+
+.table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+.history-section {
+    margin-top: -3rem;
+    padding: 1rem;
+    background-color: #325947;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px #325947;
+    color: #ffffff;
+}
+
+.history-table-wrapper {
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.history-table-wrapper table.data-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #8fbc8f;
+    z-index: 10;
+}
+
+.history-section .table-container {
+    max-height: 300px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    display: block;
+}
+
+.history-section table.data-table {
+    width: 100%;
+    table-layout: auto;
+    border-collapse: collapse;
+}
+
+.history-section table.data-table thead {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #8fbc8f;
+}
+
+.history-section table.data-table tbody {
+    /* Remove display block and overflow to avoid double scrollbars */
+}
+
+.history-section table.data-table thead th,
+.history-section table.data-table tbody td {
+    box-sizing: border-box;
+    padding: 10px;
+    word-wrap: break-word;
+}
+
+.history-section table.data-table thead th {
+    position: sticky;
+    top: 0;
+    background-color: #8fbc8f;
+    z-index: 11;
+}
+
+.history-section h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    font-weight: 700;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    box-shadow: 0 2px 6px rgba(46, 61, 26, 0.2);
+    border-radius: 8px;
+    background-color: #878787;
+    overflow: hidden;
+}
+
+.data-table th, .data-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #000000;
+}
+
+.data-table th {
+    background-color: #8fbc8f;
+    color: #f0f4f1;
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #69713f;
+}
+
+.data-table tr:hover {
+    background-color: #d4d9b8;
+}
+
+footer {
+    background: linear-gradient(135deg, #325947, #325947);
+    color: #f0f4f1;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 -2px 6px rgba(46, 61, 26, 0.15);
+    font-family: 'Georgia', serif;
+    font-style: italic;
+}
+
+.footer-text {
+    flex-grow: 1;
+    text-align: center;
+}
+
+footer p {
+    margin: 0;
+    font-size: 1rem;
+}
+
+.logo-header {
+    height: 80px;
+    width: auto;
+}
+.logo-footer {
+    height: 40px;
+    width: auto;
+}
