@@ -32,10 +32,4 @@ Welcome to the AtmosRestore Prototype Dashboard! This project is a simple and in
 - `public/FairatmosLogo.jpg` - Project logo.
 - `public/Mangrove.jpg` - Background image.
 
-## License
 
-This project is open source and available under the MIT License.
-
----
-
-Enjoy monitoring your soil conditions with AtmosRestore Prototype Dashboard!
