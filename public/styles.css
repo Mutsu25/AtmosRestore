@@ -4,7 +4,7 @@ body, html {
     display: flex;
     flex-direction: column;
     font-family: '__Inter_dbf9c5', '__Inter_Fallback_dbf9c5';
-    background-image: url('Mangrove.jpg');
+    background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('Mangrove.jpg');
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -15,17 +15,17 @@ body, html {
 .header {
     background: linear-gradient(135deg, #325947, #325947);
     color: #f0f4f1;
-    padding: 1.5rem;
+    padding: 0.5rem;
     display: flex;
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-    font-family: 'Georgia', serif;
+    font-family: 'Inter', sans-serif;
 }
 
 .header-text {
     flex-grow: 1;
-    text-align: center;
+    text-align: Center;
 }
 
 .header h1 {
@@ -37,7 +37,6 @@ body, html {
 .header p {
     margin: 0.5rem 0 0;
     font-size: 1.3rem;
-    font-style: italic;
 }
 
 .container {
@@ -50,13 +49,13 @@ body, html {
 }
 
 .card {
-    background-color: #325947;
+    background-color: rgba(50, 89, 71, 0.8);
     border-radius: 16px;
     box-shadow: 0 4px 8px #325947;
     padding: 1.5rem;
     text-align: center;
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border: 1px solid #f0f4f1;
+    border: 5px solid #000000;
 }
 
 .card:hover {
@@ -65,12 +64,11 @@ body, html {
 }
 
 .gauge-container {
-    display: flex;
-    justify-content: space-around;
-    gap: 2rem;
-    flex-wrap: wrap;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-gap: 20px;
+    margin-bottom: 20px;
 }
-
 .gauge {
     width: 180px;
     height: 140px;
@@ -105,8 +103,9 @@ canvas {
 .history-section {
     margin-top: -3rem;
     padding: 1rem;
-    background-color: #325947;
+    background-color: rgba(50, 89, 71, 0.8);
     border-radius: 16px;
+    border: 5px solid #000000;
     box-shadow: 0 4px 8px #325947;
     color: #ffffff;
 }
@@ -143,9 +142,6 @@ canvas {
     background-color: #8fbc8f;
 }
 
-.history-section table.data-table tbody {
-    /* Remove display block and overflow to avoid double scrollbars */
-}
 
 .history-section table.data-table thead th,
 .history-section table.data-table tbody td {
@@ -196,6 +192,7 @@ canvas {
     background-color: #d4d9b8;
 }
 
+
 footer {
     background: linear-gradient(135deg, #325947, #325947);
     color: #f0f4f1;
@@ -204,7 +201,7 @@ footer {
     align-items: center;
     justify-content: space-between;
     box-shadow: 0 -2px 6px rgba(46, 61, 26, 0.15);
-    font-family: 'Georgia', serif;
+    font-family: 'Inter', sans-serif;
     font-style: italic;
 }
 
@@ -220,7 +217,7 @@ footer p {
 
 .logo-header {
     height: 80px;
-    width: auto;
+    width: fit-content;
 }
 .logo-footer {
     height: 40px;
