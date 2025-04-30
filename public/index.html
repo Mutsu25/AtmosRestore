@@ -1,19 +1,24 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>AtmosRestore Prototype Dashboard</title>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet" />
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+    <link rel="manifest" href="site.webmanifest">
+    <link rel="shortcut icon" href="../favicon_io/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
     <div class="header">
         <img src="FairatmosLogo.jpg" alt="Fairatmos Logo" class="logo-header" />
         <div class="header-text">
-            <h1>AtmosRestore Draft</h1>
-            <p>This is the dashboard for the IoT</p>
+            <h1>AtmosRestore</h1>
+            <p>In-House Soil & Water Assesment Tools</p>
         </div>
     </div>
     <div class="container">
@@ -34,6 +39,22 @@
                 <div class="gauge" id="salinityGauge"></div>
                 <p>Salinity</p>
             </div>
+            <div class="card">
+                <div class="gauge" id="floodingFrequencyGauge"></div>
+                <p>Flooding Frequency (per day)</p>
+            </div>
+            <div class="card">
+                <div class="gauge" id="highTideDurationGauge"></div>
+                <p>High Tide Duration (min)</p>
+            </div>
+            <div class="card">
+                <div class="gauge" id="currentVelocityGauge"></div>
+                <p>Current Velocity (m/s)</p>
+            </div>
+            <div class="card">
+                <div class="gauge" id="floodingDurationGauge"></div>
+                <p>Flooding Duration (min/day)</p>
+            </div>
         </div>
         <div class="chart-container">
             <div class="card" id="moistureChartCard">
@@ -52,6 +73,22 @@
                 <h3>Salinity Trend</h3>
                 <canvas id="salinityChart"></canvas>
             </div>
+            <div class="card" id="floodingDurationChartCard">
+                <h3>Flooding Duration Trend</h3>
+                <canvas id="floodingDurationChart"></canvas>
+            </div>
+            <div class="card" id="floodingFrequencyChartCard">
+                <h3>Flooding Frequency Trend</h3>
+                <canvas id="floodingFrequencyChart"></canvas>
+            </div>
+            <div class="card" id="highTideDurationChartCard">
+                <h3>High Tide Duration Trend</h3>
+                <canvas id="highTideDurationChart"></canvas>
+            </div>
+            <div class="card" id="currentVelocityChartCard">
+                <h3>Current Velocity Trend</h3>
+                <canvas id="currentVelocityChart"></canvas>
+            </div>
         </div>
         <div class="table-container">
             <h3>Data Log</h3>
@@ -63,6 +100,10 @@
                         <th>Temperature</th>
                         <th>pH Level</th>
                         <th>Salinity</th>
+                        <th>Flooding Duration (min/day)</th>
+                        <th>Flooding Frequency (per day)</th>
+                        <th>High Tide Duration (min)</th>
+                        <th>Current Velocity (m/s)</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -73,7 +114,8 @@
         <section id="historySection" class="history-section">
             <h2>History Readings</h2>
             <div class="table-container">
-                <table id="historyTable" class="data-table">
+                <h3>Soil Metrics</h3>
+                <table id="historyTableSoil" class="data-table">
                     <thead>
                         <tr>
                             <th>Time</th>
@@ -84,7 +126,24 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <!-- History data entries will be appended here -->
+                        <!-- Soil history data entries will be appended here -->
+                    </tbody>
+                </table>
+            </div>
+            <div class="table-container">
+                <h3>Water & Tide Metrics</h3>
+                <table id="historyTableWater" class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Time</th>
+                            <th>Flooding Duration (min/day)</th>
+                            <th>Flooding Frequency (per day)</th>
+                            <th>High Tide Duration (min)</th>
+                            <th>Current Velocity (m/s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Water & tide history data entries will be appended here -->
                     </tbody>
                 </table>
             </div>
