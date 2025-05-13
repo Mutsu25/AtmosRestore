@@ -70,3 +70,5 @@ int getMedianNum(int bArray[], int iFilterLen) {
         bTemp = (bTab[iFilterLen / 2] + bTab[iFilterLen / 2 - 1]) / 2;
     return bTemp;
 }
+
+//JANGAN DIUBAH DULU DELICATEEEEEEE
