@@ -165,7 +165,20 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script>
+      var firebaseConfig = {
+        apiKey: "AIzaSyCXCop2CFFVKHwTDC7IAzk1qx-7SbZAclo",
+        authDomain: "atmosrestore.firebaseapp.com",
+        databaseURL: "https://atmosrestore-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "atmosrestore",
+        storageBucket: "atmosrestore.appspot.com",
+        messagingSenderId: "790913135412",
+        appId: "1:790913135412:web:dfc7e8cd23a7ebadd52b61",
+        measurementId: "G-TXM0FLD1P9"
+      };
+      firebase.initializeApp(firebaseConfig);
+    </script>
     <script src="app.js"></script>
     <script>
     // Hamburger menu toggle

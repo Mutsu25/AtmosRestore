@@ -143,17 +143,11 @@ const moistureChart = new Chart(moistureCtx, {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -161,10 +155,7 @@ const moistureChart = new Chart(moistureCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -187,17 +178,11 @@ const temperatureChart = new Chart(temperatureCtx, {
         scales: {
             y: {
                 beginAtZero: true,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -205,10 +190,7 @@ const temperatureChart = new Chart(temperatureCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -233,17 +215,11 @@ const phChart = new Chart(phCtx, {
                 beginAtZero: false,
                 suggestedMin: 0,
                 suggestedMax: 14,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -251,10 +227,7 @@ const phChart = new Chart(phCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -278,17 +251,11 @@ const salinityChart = new Chart(salinityCtx, {
             y: {
                 beginAtZero: true,
                 suggestedMax: 50,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -296,10 +263,7 @@ const salinityChart = new Chart(salinityCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -324,17 +288,11 @@ const floodingDurationChart = new Chart(floodingDurationCtx, {
             y: {
                 beginAtZero: true,
                 suggestedMax: 400,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -342,10 +300,7 @@ const floodingDurationChart = new Chart(floodingDurationCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -369,17 +324,11 @@ const floodingFrequencyChart = new Chart(floodingFrequencyCtx, {
             y: {
                 beginAtZero: true,
                 suggestedMax: 3,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -387,10 +336,7 @@ const floodingFrequencyChart = new Chart(floodingFrequencyCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -414,17 +360,11 @@ const highTideDurationChart = new Chart(highTideDurationCtx, {
             y: {
                 beginAtZero: true,
                 suggestedMax: 300,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -432,10 +372,7 @@ const highTideDurationChart = new Chart(highTideDurationCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
@@ -460,17 +397,11 @@ const currentVelocityChart = new Chart(currentVelocityCtx, {
             y: {
                 beginAtZero: true,
                 suggestedMax: 0.2,
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             },
             x: {
-                ticks: {
-                    font: {
-                        family: 'Inter'
-                    }
+                ticks: {//
                 }
             }
         },
@@ -478,20 +409,82 @@ const currentVelocityChart = new Chart(currentVelocityCtx, {
         plugins: {
             legend: {
                 position: 'top',
-                labels: {
-                    font: {
-                        family: 'Inter'
-                    }
+                labels: {//
                 }
             }
         }
     }
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    // Listen for live moisture updates
+    firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
+        const value = snapshot.val();
+        console.log('Firebase /sensor/moisture value:', value); // Debug log
+        if (typeof value === 'number') {
+            soilData.moisture = value;
+            moistureGauge.refresh(value);
+            const currentTime = new Date().toLocaleTimeString();
+            // Update chart
+            moistureChart.data.labels.push(currentTime);
+            moistureChart.data.datasets[0].data.push(value);
+            if (moistureChart.data.labels.length > 20) {
+                moistureChart.data.labels.shift();
+                moistureChart.data.datasets[0].data.shift();
+            }
+            moistureChart.update();
+            // Update soil history table
+            const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+            const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+            newSoilHistoryRow.innerHTML = `
+                <td>${currentTime}</td>
+                <td>${soilData.moisture}</td>
+                <td>${soilData.temperature}</td>
+                <td>${soilData.ph}</td>
+                <td>${soilData.salinity}</td>`;
+            while (soilHistoryTableBody.rows.length > 10) {
+                soilHistoryTableBody.deleteRow(0);
+            }
+            // Update last updated timestamp
+            document.getElementById('lastUpdated').textContent = currentTime;
+        }
+    });
+    // Listen for live temperature updates
+    firebase.database().ref('/sensor/temperature').on('value', function(snapshot) {
+        const value = snapshot.val();
+        console.log('Firebase /sensor/temperature value:', value); // Debug log
+        if (typeof value === 'number') {
+            soilData.temperature = value;
+            temperatureGauge.refresh(value);
+            const currentTime = new Date().toLocaleTimeString();
+            // Update chart
+            temperatureChart.data.labels.push(currentTime);
+            temperatureChart.data.datasets[0].data.push(value);
+            if (temperatureChart.data.labels.length > 20) {
+                temperatureChart.data.labels.shift();
+                temperatureChart.data.datasets[0].data.shift();
+            }
+            temperatureChart.update();
+            // Update soil history table
+            const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+            const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+            newSoilHistoryRow.innerHTML = `
+                <td>${currentTime}</td>
+                <td>${soilData.moisture}</td>
+                <td>${soilData.temperature}</td>
+                <td>${soilData.ph}</td>
+                <td>${soilData.salinity}</td>`;
+            while (soilHistoryTableBody.rows.length > 10) {
+                soilHistoryTableBody.deleteRow(0);
+            }
+            // Update last updated timestamp
+            document.getElementById('lastUpdated').textContent = currentTime;
+        }
+    });
+});
+
 function updateDashboard() {
-    // Simulate data updates
-    soilData.moisture = Math.floor(Math.random() * 100);
-    soilData.temperature = Math.floor(Math.random() * 50);
+    // Only update static/dummy data here
     soilData.ph = parseFloat((Math.random() * 14).toFixed(2));
     soilData.salinity = parseFloat((Math.random() * 50).toFixed(2));
     soilData.floodingDuration = parseFloat((Math.random() * 400).toFixed(2));
@@ -500,8 +493,6 @@ function updateDashboard() {
     soilData.currentVelocity = parseFloat((Math.random() * 0.99 + 0.01).toFixed(2));
 
     // Update gauges with new values
-    moistureGauge.refresh(soilData.moisture);
-    temperatureGauge.refresh(soilData.temperature);
     phGauge.refresh(soilData.ph);
     salinityGauge.refresh(soilData.salinity);
     floodingDurationGauge.refresh(soilData.floodingDuration);
@@ -509,23 +500,8 @@ function updateDashboard() {
     highTideDurationGauge.refresh(soilData.highTideDuration);
     currentVelocityGauge.refresh(soilData.currentVelocity);
 
+    // Update chart datasets with new values (ONLY for static/dummy metrics)
     const currentTime = new Date().toLocaleTimeString();
-
-    // Update chart datasets with new values
-    moistureChart.data.labels.push(currentTime);
-    moistureChart.data.datasets[0].data.push(soilData.moisture);
-    if (moistureChart.data.labels.length > 20) {
-        moistureChart.data.labels.shift();
-        moistureChart.data.datasets[0].data.shift();
-    }
-
-    temperatureChart.data.labels.push(currentTime);
-    temperatureChart.data.datasets[0].data.push(soilData.temperature);
-    if (temperatureChart.data.labels.length > 20) {
-        temperatureChart.data.labels.shift();
-        temperatureChart.data.datasets[0].data.shift();
-    }
-
     phChart.data.labels.push(currentTime);
     phChart.data.datasets[0].data.push(soilData.ph);
     if (phChart.data.labels.length > 20) {
@@ -569,15 +545,15 @@ function updateDashboard() {
     }
 
 
-    // Append a new row to the soil history table
-    const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
-    const newSoilHistoryRow = soilHistoryTableBody.insertRow();
-    newSoilHistoryRow.innerHTML = `
-        <td>${currentTime}</td>
-        <td>${soilData.moisture}</td>
-        <td>${soilData.temperature}</td>
-        <td>${soilData.ph}</td>
-        <td>${soilData.salinity}</td>`;
+    // Append a new row to the soil history table (REMOVE moisture/temperature row here)
+    // const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+    // const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+    // newSoilHistoryRow.innerHTML = `
+    //     <td>${currentTime}</td>
+    //     <td>${soilData.moisture}</td>
+    //     <td>${soilData.temperature}</td>
+    //     <td>${soilData.ph}</td>
+    //     <td>${soilData.salinity}</td>`;
 
     // Append a new row to the water & tide history table
     const waterHistoryTableBody = document.getElementById('historyTableWater').getElementsByTagName('tbody')[0];
@@ -589,19 +565,12 @@ function updateDashboard() {
         <td>${soilData.highTideDuration}</td>
         <td>${soilData.currentVelocity}</td>`;
 
-    // Limit soil history table rows to last 10 entries
-    while (soilHistoryTableBody.rows.length > 10) {
-        soilHistoryTableBody.deleteRow(0);
-    }
-
     // Limit water & tide history table rows to last 10 entries
     while (waterHistoryTableBody.rows.length > 10) {
         waterHistoryTableBody.deleteRow(0);
     }
 
     // Update charts
-    moistureChart.update();
-    temperatureChart.update();
     phChart.update();
     salinityChart.update();
     floodingDurationChart.update();
