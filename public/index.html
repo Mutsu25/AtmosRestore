@@ -29,7 +29,8 @@
             <ul>
                 <li><a href="#" data-page="gaugesPage">Gauges</a></li>
                 <li><a href="#" data-page="chartsPage">Charts</a></li>
-                <li><a href="#" data-page="historyPage">History Readings</a></li>
+                <li><a href="#" data-page="soilHistoryPage">Soil Measurement History</a></li>
+                <li><a href="#" data-page="waterHistoryPage">Hydrology History</a></li>
             </ul>
         </nav>
     </div>
@@ -106,42 +107,49 @@
                 </div>
             </div>
         </div>
-        <div id="historyPage" class="page-section" style="display:none;">
-            <section id="historySection" class="history-section">
-                <h2>History Readings</h2>
-                <div class="table-container">
-                    <h3>Soil Metrics</h3>
-                    <table id="historyTableSoil" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Moisture</th>
-                                <th>Temperature</th>
-                                <th>pH Level</th>
-                                <th>Salinity</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Soil history data entries will be appended here -->
-                        </tbody>
-                    </table>
+        <div id="soilHistoryPage" class="page-section" style="display:none;">
+            <section class="history-section-soil">
+                <div class="history-cards-wrapper">
+                    <div class="card">
+                        <h3>Soil Metrics</h3>
+                        <table id="historyTableSoil" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Moisture</th>
+                                    <th>Temperature</th>
+                                    <th>pH Level</th>
+                                    <th>Salinity</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Soil history data entries will be appended here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
-                <div class="table-container">
-                    <h3>Water & Tide Metrics</h3>
-                    <table id="historyTableWater" class="data-table">
-                        <thead>
-                            <tr>
-                                <th>Time</th>
-                                <th>Flooding Duration (min/day)</th>
-                                <th>Flooding Frequency (per day)</th>
-                                <th>High Tide Duration (min)</th>
-                                <th>Current Velocity (m/s)</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Water & tide history data entries will be appended here -->
-                        </tbody>
-                    </table>
+            </section>
+        </div>
+        <div id="waterHistoryPage" class="page-section" style="display:none;">
+            <section class="history-section-water">
+                <div class="history-cards-wrapper">
+                    <div class="card">
+                        <h3>Water & Tide Metrics</h3>
+                        <table id="historyTableWater" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Time</th>
+                                    <th>Flooding Duration (min/day)</th>
+                                    <th>Flooding Frequency (per day)</th>
+                                    <th>High Tide Duration (min)</th>
+                                    <th>Current Velocity (m/s)</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Water & tide history data entries will be appended here -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </section>
         </div>
@@ -149,7 +157,7 @@
     <footer>
         <img src="FairatmosLogo.jpg" alt="Fairatmos Logo" class="logo-footer" />
         <div class="footer-text">
-            <p>Data Source: Soil IoT Sensors | Last Updated: <span id="lastUpdated">N/A</span></p>
+            <p>Data Source: AtmosIoT Ekowisata PIK | Last Updated: <span id="lastUpdated">N/A</span></p>
         </div>
     </footer>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/raphael/2.3.0/raphael.min.js"></script>

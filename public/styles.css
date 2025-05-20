@@ -112,6 +112,36 @@ canvas {
     color: #ffffff;
 }
 
+//
+
+.history-section-soil h2, .history-section-water h2 {
+    text-align: center;
+    margin-bottom: 1.2rem;
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #eafbe6;
+    text-shadow: 1px 1px 8px #2f4f2f;
+}
+
+.history-cards-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.history-cards-wrapper .card {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    margin-bottom: 0;
+    background-color: rgba(50, 89, 71, 0.8);
+    color: #eafbe6;
+    border: 5px solid #000000;
+    box-shadow: 0 6px 24px #2f4f2f55;
+    border-radius: 16px;
+    padding: 1.5rem 1rem;
+}
+
 .history-table-wrapper {
     max-height: 300px;
     overflow-y: auto;
@@ -287,17 +317,6 @@ footer p {
     display: block;
 }
 
-.history-metrics-wrapper {
-    display: flex;
-    gap: 2rem;
-    flex-wrap: wrap;
-    justify-content: space-between;
-}
-.history-metrics-wrapper .table-container {
-    flex: 1 1 350px;
-    min-width: 300px;
-    max-width: 48%;
-}
 @media (max-width: 900px) {
     .gauge-container {
         grid-template-columns: repeat(2, 1fr);
@@ -306,12 +325,11 @@ footer p {
         flex-direction: column;
         gap: 1rem;
     }
-    .history-metrics-wrapper {
-        flex-direction: column;
-        gap: 1.5rem;
+    .history-section-soil, .history-section-water {
+        padding: 1rem 0.2rem;
     }
-    .history-metrics-wrapper .table-container {
-        max-width: 100%;
+    .history-cards-wrapper .card {
+        padding: 1rem 0.5rem;
     }
 }
 @media (max-width: 600px) {
