@@ -14,6 +14,18 @@
     <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
+    <div id="loginPage" class="login-page" style="display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100vh; background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)); position: fixed; top: 0; left: 0; width: 100vw; z-index: 2000;">
+        <div class="login-card" style="background: #fff; font-family: 'Inter', sans-serif; border: 5px solid #000000; color: #32413a; border-radius: 16px; box-shadow: 0 4px 24px #2f4f2f55; padding: 2rem 2.5rem; min-width: 320px; display: flex; flex-direction: column; align-items: center;">
+            <img src="FairatmosLogo.jpg" alt="Fairatmos Logo" style="height: 60px; margin-bottom: 1rem;" />
+            <h2 style="margin-bottom: 1rem; font-family: 'Inter', sans-serif;">AtmosRestore Login</h2>
+            <form id="loginForm" style="width: 100%; display: flex; flex-direction: column; gap: 1rem;">
+                <input type="email" id="loginEmail" placeholder="Email" required style="padding: 0.7rem; border-radius: 8px; border: 1px solid #325947; font-size: 1rem;" />
+                <input type="password" id="loginPassword" placeholder="Password" required style="padding: 0.7rem; border-radius: 8px; border: 1px solid #325947; font-size: 1rem;" />
+                <button type="submit" style="background: #325947; color: #fff; border: none; border-radius: 8px; padding: 0.7rem; font-size: 1.1rem; cursor: pointer;">Login</button>
+                <div id="loginError" style="color: #ed1c24; font-size: 0.95rem; min-height: 1.2em;"></div>
+            </form>
+        </div>
+    </div>
     <div class="header">
         <img src="FairatmosLogo.jpg" alt="Fairatmos Logo" class="logo-header" />
         <div class="header-text">
@@ -166,6 +178,7 @@
     <!-- Firebase SDKs -->
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
     <script>
       var firebaseConfig = {
         apiKey: "AIzaSyCXCop2CFFVKHwTDC7IAzk1qx-7SbZAclo",
@@ -197,6 +210,39 @@
             sections.forEach(sec => sec.style.display = 'none');
             document.getElementById(page).style.display = '';
             navDrawer.classList.remove('open');
+        });
+    });
+    // Firebase Auth login logic
+    document.addEventListener('DOMContentLoaded', function() {
+        const loginPage = document.getElementById('loginPage');
+        const loginForm = document.getElementById('loginForm');
+        const loginError = document.getElementById('loginError');
+        // Hide dashboard until login
+        document.querySelector('.header').style.display = 'none';
+        document.querySelector('.container').style.display = 'none';
+        document.querySelector('footer').style.display = 'none';
+        // Check auth state
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                loginPage.style.display = 'none';
+                document.querySelector('.header').style.display = '';
+                document.querySelector('.container').style.display = '';
+                document.querySelector('footer').style.display = '';
+            } else {
+                loginPage.style.display = 'flex';
+                document.querySelector('.header').style.display = 'none';
+                document.querySelector('.container').style.display = 'none';
+                document.querySelector('footer').style.display = 'none';
+            }
+        });
+        // Login form submit
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            firebase.auth().signInWithEmailAndPassword(email, password)
+                .then(() => { loginError.textContent = ''; })
+                .catch(err => { loginError.textContent = err.message; });
         });
     });
     </script>
