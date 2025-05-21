@@ -5,6 +5,7 @@ body, html {
     flex-direction: column;
     font-family: '__Inter_dbf9c5', '__Inter_Fallback_dbf9c5';
     background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)), url('Mangrove.jpg');
+    width: 100%;
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center center;
@@ -30,13 +31,13 @@ body, html {
 
 .header h1 {
     margin: 0;
-    font-size: 2.5rem;
+    font-size: 1.5rem;
     text-shadow: 1px 1px 2px #2f4f2f;
 }
 
 .header p {
     margin: 0.5rem 0 0;
-    font-size: 1.3rem;
+    font-size: 1rem;
 }
 
 .container {
