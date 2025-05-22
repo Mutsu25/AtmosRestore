@@ -67,6 +67,7 @@ const phGauge = createGauge({
     value: soilData.ph,
     min: 0,
     max: 14,
+    decimals:2,
     title: "pH Level",
     label: "pH",
     levelColors: ["#ed1c24", "#f2ed23", "#4caf50"]
@@ -75,7 +76,8 @@ const salinityGauge = createGauge({
     id: "salinityGauge",
     value: soilData.salinity,
     min: 0,
-    max: 100,
+    max: 50,
+    decimals: 2,
     title: "Salinity",
     label: "ppt",
     levelColors: ["#a0522d", "#deb887", "#4caf50"]
@@ -418,9 +420,9 @@ const currentVelocityChart = new Chart(currentVelocityCtx, {
 
 document.addEventListener('DOMContentLoaded', function() {
     // Listen for live moisture updates
-    firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
+    firebase.database().ref('/sensor/humidity').on('value', function(snapshot) {
         const value = snapshot.val();
-        console.log('Firebase /sensor/moisture value:', value); // Debug log
+        console.log('Firebase /sensor/humidity value:', value); // Debug log
         if (typeof value === 'number') {
             soilData.moisture = value;
             moistureGauge.refresh(value);
@@ -481,20 +483,80 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('lastUpdated').textContent = currentTime;
         }
     });
+    // Listen for live salinity updates
+    firebase.database().ref('/sensor/salinity').on('value', function(snapshot) {
+        const value = snapshot.val();
+        console.log('Firebase /sensor/salinity value:', value); // Debug log
+        if (typeof value === 'number') {
+            soilData.salinity = value;
+            salinityGauge.refresh(value);
+            const currentTime = new Date().toLocaleTimeString();
+            // Update chart
+            salinityChart.data.labels.push(currentTime);
+            salinityChart.data.datasets[0].data.push(value);
+            if (salinityChart.data.labels.length > 20) {
+                salinityChart.data.labels.shift();
+                salinityChart.data.datasets[0].data.shift();
+            }
+            salinityChart.update();
+            // Update soil history table
+            const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+            const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+            newSoilHistoryRow.innerHTML = `
+                <td>${currentTime}</td>
+                <td>${soilData.moisture}</td>
+                <td>${soilData.temperature}</td>
+                <td>${soilData.ph}</td>
+                <td>${soilData.salinity}</td>`;
+            while (soilHistoryTableBody.rows.length > 10) {
+                soilHistoryTableBody.deleteRow(0);
+            }
+            // Update last updated timestamp
+            document.getElementById('lastUpdated').textContent = currentTime;
+        }
+    });
+    // Listen for live ph updates
+    firebase.database().ref('/sensor/ph').on('value', function(snapshot) {
+        const value = snapshot.val();
+        console.log('Firebase /sensor/ph value:', value); // Debug log
+        if (typeof value === 'number') {
+            soilData.ph = value;
+            phGauge.refresh(value);
+            const currentTime = new Date().toLocaleTimeString();
+            // Update chart
+            phChart.data.labels.push(currentTime);
+            phChart.data.datasets[0].data.push(value);
+            if (phChart.data.labels.length > 20) {
+                phChart.data.labels.shift();
+                phChart.data.datasets[0].data.shift();
+            }
+            phChart.update();
+            // Update soil history table
+            const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+            const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+            newSoilHistoryRow.innerHTML = `
+                <td>${currentTime}</td>
+                <td>${soilData.moisture}</td>
+                <td>${soilData.temperature}</td>
+                <td>${soilData.ph}</td>
+                <td>${soilData.salinity}</td>`;
+            while (soilHistoryTableBody.rows.length > 10) {
+                soilHistoryTableBody.deleteRow(0);
+            }
+            // Update last updated timestamp
+            document.getElementById('lastUpdated').textContent = currentTime;
+        }
+    });
 });
 
 function updateDashboard() {
     // Only update static/dummy data here
-    soilData.ph = parseFloat((Math.random() * 14).toFixed(2));
-    soilData.salinity = parseFloat((Math.random() * 50).toFixed(2));
     soilData.floodingDuration = parseFloat((Math.random() * 400).toFixed(2));
     soilData.floodingFrequency = parseFloat((Math.random() * 3).toFixed(2));
     soilData.highTideDuration = parseFloat((Math.random() * 300).toFixed(2));
     soilData.currentVelocity = parseFloat((Math.random() * 0.99 + 0.01).toFixed(2));
 
     // Update gauges with new values
-    phGauge.refresh(soilData.ph);
-    salinityGauge.refresh(soilData.salinity);
     floodingDurationGauge.refresh(soilData.floodingDuration);
     floodingFrequencyGauge.refresh(soilData.floodingFrequency);
     highTideDurationGauge.refresh(soilData.highTideDuration);
@@ -502,20 +564,6 @@ function updateDashboard() {
 
     // Update chart datasets with new values (ONLY for static/dummy metrics)
     const currentTime = new Date().toLocaleTimeString();
-    phChart.data.labels.push(currentTime);
-    phChart.data.datasets[0].data.push(soilData.ph);
-    if (phChart.data.labels.length > 20) {
-        phChart.data.labels.shift();
-        phChart.data.datasets[0].data.shift();
-    }
-
-    salinityChart.data.labels.push(currentTime);
-    salinityChart.data.datasets[0].data.push(soilData.salinity);
-    if (salinityChart.data.labels.length > 20) {
-        salinityChart.data.labels.shift();
-        salinityChart.data.datasets[0].data.shift();
-    }
-
     floodingDurationChart.data.labels.push(currentTime);
     floodingDurationChart.data.datasets[0].data.push(soilData.floodingDuration);
     if (floodingDurationChart.data.labels.length > 20) {
@@ -545,7 +593,7 @@ function updateDashboard() {
     }
 
 
-    // Append a new row to the soil history table (REMOVE moisture/temperature row here)
+    // Append a new row to the soil history table (REMOVE moisture/temperature/salinity row here)
     // const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
     // const newSoilHistoryRow = soilHistoryTableBody.insertRow();
     // newSoilHistoryRow.innerHTML = `
@@ -582,8 +630,8 @@ function updateDashboard() {
     document.getElementById('lastUpdated').textContent = currentTime;
 }
 
- // Set interval to update charts and data log every 3 seconds
- setInterval(updateDashboard, 3000);
+// Set interval to update charts and data log every 3 seconds
+setInterval(updateDashboard, 3000);
 
 function populateInitialHistory() {
     const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
