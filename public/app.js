@@ -14,6 +14,7 @@ const currentVelocityData = [];
 // Added new metrics: floodingDuration, floodingFrequency, highTideDuration, currentVelocity
 const soilData = {
     moisture: 40,
+    humidity: 70, // Add humidity to soilData
     temperature: 25,
     ph: 6.5,
     salinity: 1.2,
@@ -22,7 +23,7 @@ const soilData = {
     highTideDuration: 220, // in minutes
     currentVelocity: 0.11, // in m/s
     history: [
-        { time: 'Starting', moisture: 0, temperature: 0, ph: 0, salinity: 0,
+        { time: 'Starting', moisture: 0, humidity: 0, temperature: 0, ph: 0, salinity: 0,
           floodingDuration: 0, floodingFrequency: 0, highTideDuration: 0, currentVelocity: 0 },
     ]
 };
@@ -53,6 +54,18 @@ const moistureGauge = createGauge({
     label: "%",
     levelColors: ["#ed1c24", "#f2ed23", "#4caf50"]
 });
+
+const humidityGauge = createGauge({
+    id: "humidityGauge",
+    value: getRandomInt(60, 80),
+    min: 0,
+    max: 100,
+    title: "Humidity",
+    label: "%",
+    levelColors: ["#b2dfdb", "#4dd0e1", "#0097a7"]
+});
+
+
 const temperatureGauge = createGauge({
     id: "temperatureGauge",
     value: soilData.temperature,
@@ -121,6 +134,39 @@ const currentVelocityGauge = createGauge({
     levelColors: ["#4caf50", "#f2ed23", "#ed1c24"]
 });
 
+
+
+setInterval(function() {
+    humidityGauge.refresh(getRandomInt(60, 80));
+}, 2000);
+
+// Dummy data for humidity chart
+var humidityChartCtx = document.getElementById('humidityChart').getContext('2d');
+var humidityChart = new Chart(humidityChartCtx, {
+    type: 'line',
+    data: {
+        labels: ["08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00"],
+        datasets: [{
+            label: 'Humidity (%)',
+            data: [60, 62, 65, 67, 66, 68, 65],
+            borderColor: '#0097a7',
+            // backgroundColor: 'rgb(250, 250, 250)',
+            fill: true,
+            tension: 0.4
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 100 }
+        }
+    }
+});
+
 const moistureCtx = document.getElementById('moistureChart').getContext('2d');
 const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
 const phCtx = document.getElementById('phChart').getContext('2d');
@@ -173,6 +219,7 @@ const temperatureChart = new Chart(temperatureCtx, {
             data: temperatureData,
             borderColor: '#ffa726',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -208,6 +255,7 @@ const phChart = new Chart(phCtx, {
             data: phData,
             borderColor: '#3cba9f',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -245,6 +293,7 @@ const salinityChart = new Chart(salinityCtx, {
             data: salinityData,
             borderColor: '#a0522d',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -282,6 +331,7 @@ const floodingDurationChart = new Chart(floodingDurationCtx, {
             data: floodingDurationData,
             borderColor: '#4caf50',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -318,6 +368,7 @@ const floodingFrequencyChart = new Chart(floodingFrequencyCtx, {
             data: floodingFrequencyData,
             borderColor: '#4caf50',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -354,6 +405,7 @@ const highTideDurationChart = new Chart(highTideDurationCtx, {
             data: highTideDurationData,
             borderColor: '#4caf50',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -391,6 +443,7 @@ const currentVelocityChart = new Chart(currentVelocityCtx, {
             decimals: 2,
             borderColor: '#4caf50',
             borderWidth: 2,
+            tension: 0.4,
             fill: true
         }]
     },
@@ -418,7 +471,82 @@ const currentVelocityChart = new Chart(currentVelocityCtx, {
     }
 });
 
+// === Optimal Species Metrics Card Logic ===
+const speciesOptimalMetrics = {
+    'Rhizophora mucronata': {
+        moisture: '60-80%',
+        humidity: '70-90%',
+        temperature: '25-32°C',
+        ph: '5.5-7.5',
+        salinity: '5-25 ppt'
+    },
+    'Rhizophora apiculata': {
+        moisture: '60-80%',
+        humidity: '70-90%',
+        temperature: '25-32°C',
+        ph: '5.5-7.5',
+        salinity: '5-25 ppt'
+    },
+    'Rhizophora stylosa': {
+        moisture: '60-80%',
+        humidity: '70-90%',
+        temperature: '25-32°C',
+        ph: '5.5-7.5',
+        salinity: '5-25 ppt'
+    },
+    'Avicennia marina': {
+        moisture: '50-70%',
+        humidity: '60-85%',
+        temperature: '20-35°C',
+        ph: '6.0-8.0',
+        salinity: '10-35 ppt'
+    },
+    'Bruguiera gymnnorhiza': {
+        moisture: '60-80%',
+        humidity: '70-90%',
+        temperature: '25-32°C',
+        ph: '5.5-7.5',
+        salinity: '5-25 ppt'
+    }
+};
+
+function updateSpeciesMetricsCard() {
+    const select = document.getElementById('speciesSelect');
+    const metricsDiv = document.getElementById('speciesMetricsDisplay');
+    const selected = select.value;
+    const metrics = speciesOptimalMetrics[selected];
+    if (metrics) {
+        metricsDiv.innerHTML = `
+            <table class="species-metrics-table">
+                <tr><th>Moisture</th><td>${metrics.moisture}</td></tr>
+                <tr><th>Humidity</th><td>${metrics.humidity}</td></tr>
+                <tr><th>Temperature</th><td>${metrics.temperature}</td></tr>
+                <tr><th>pH</th><td>${metrics.ph}</td></tr>
+                <tr><th>Salinity</th><td>${metrics.salinity}</td></tr>
+            </table>
+        `;
+    } else {
+        metricsDiv.innerHTML = '<em>Select a species to view optimal metrics.</em>';
+    }
+}
+
 document.addEventListener('DOMContentLoaded', function() {
+    // Listen for live humidity updates (dummy for now)
+    setInterval(function() {
+        const humidityValue = getRandomInt(60, 80);
+        soilData.humidity = humidityValue;
+        humidityGauge.refresh(humidityValue);
+        const currentTime = new Date().toLocaleTimeString();
+        // Update humidity chart
+        humidityChart.data.labels.push(currentTime);
+        humidityChart.data.datasets[0].data.push(humidityValue);
+        if (humidityChart.data.labels.length > 20) {
+            humidityChart.data.labels.shift();
+            humidityChart.data.datasets[0].data.shift();
+        }
+        humidityChart.update();
+    }, 2000);
+
     // Listen for live moisture updates
     firebase.database().ref('/sensor/humidity').on('value', function(snapshot) {
         const value = snapshot.val();
@@ -546,6 +674,36 @@ document.addEventListener('DOMContentLoaded', function() {
             // Update last updated timestamp
             document.getElementById('lastUpdated').textContent = currentTime;
         }
+    });
+
+    // Optimal species metrics card setup
+    const speciesSelect = document.getElementById('speciesSelect');
+    if (speciesSelect) {
+        speciesSelect.addEventListener('change', updateSpeciesMetricsCard);
+        updateSpeciesMetricsCard(); // Initialize on load
+    }
+
+    // Chart dropdown logic
+    const chartSelect = document.getElementById('chartSelect');
+    const chartCards = [
+        'moistureChartCard',
+        'humidityChartCard',
+        'temperatureChartCard',
+        'phChartCard',
+        'salinityChartCard',
+        'floodingDurationChartCard',
+        'floodingFrequencyChartCard',
+        'highTideDurationChartCard',
+        'currentVelocityChartCard'
+    ];
+    chartSelect.addEventListener('change', function() {
+        chartCards.forEach(id => {
+            document.getElementById(id).style.display = (id === this.value) ? '' : 'none';
+        });
+    });
+    // Show only the first chart by default
+    chartCards.forEach((id, idx) => {
+        document.getElementById(id).style.display = idx === 0 ? '' : 'none';
     });
 });
 
@@ -701,6 +859,39 @@ function populateInitialHistory() {
     currentVelocityChart.update();
 }
 
-populateInitialHistory();
-
 // No changes needed for gauge, chart, or history logic. All DOM elements retain their IDs and are simply shown/hidden by navigation. No code changes required for this separation.
+
+// Helper for random int
+function getRandomInt(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+document.getElementById('exportSoilHistoryCSV').addEventListener('click', function() {
+    exportTableToCSV('historyTableSoil', 'soil_metrics_history.csv');
+});
+document.getElementById('exportWaterHistoryCSV').addEventListener('click', function() {
+    exportTableToCSV('historyTableWater', 'water_tide_metrics_history.csv');
+});
+
+function exportTableToCSV(tableId, filename) {
+    const table = document.getElementById(tableId);
+    let csv = [];
+    for (let row of table.rows) {
+        let rowData = [];
+        for (let cell of row.cells) {
+            let text = cell.innerText.replace(/"/g, '""');
+            rowData.push(`"${text}"`);
+        }
+        csv.push(rowData.join(','));
+    }
+    const csvContent = csv.join('\n');
+    const blob = new Blob([csvContent], { type: 'text/csv' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+}

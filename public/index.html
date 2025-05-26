@@ -39,7 +39,8 @@
         </div>
         <nav class="nav-drawer" id="navDrawer">
             <ul>
-                <li><a href="#" data-page="gaugesPage">Gauges</a></li>
+                <li><a href="#" data-page="gaugesPage">Soil Gauges</a></li>
+                <li><a href="#" data-page="hydrologyGaugesPage">Hydrology Gauges</a></li>
                 <li><a href="#" data-page="chartsPage">Charts</a></li>
                 <li><a href="#" data-page="soilHistoryPage">Soil Measurement History</a></li>
                 <li><a href="#" data-page="waterHistoryPage">Hydrology History</a></li>
@@ -49,71 +50,113 @@
     <div class="container">
         <div id="gaugesPage" class="page-section">
             <div class="gauge-container">
-                <div class="card">
-                    <div class="gauge" id="moistureGauge"></div>
-                    <p>Moisture</p>
+                <div class="gauge-group">
+                    <div class="card">
+                        <div class="gauge" id="moistureGauge"></div>
+                        <p>Moisture</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="humidityGauge"></div>
+                        <p>Humidity</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="temperatureGauge"></div>
+                        <p>Temperature</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="phGauge"></div>
+                        <p>pH Level</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="salinityGauge"></div>
+                        <p>Salinity</p>
+                    </div>
                 </div>
-                <div class="card">
-                    <div class="gauge" id="temperatureGauge"></div>
-                    <p>Temperature</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="phGauge"></div>
-                    <p>pH Level</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="salinityGauge"></div>
-                    <p>Salinity</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="floodingFrequencyGauge"></div>
-                    <p>Flooding Frequency (per day)</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="highTideDurationGauge"></div>
-                    <p>High Tide Duration (min)</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="currentVelocityGauge"></div>
-                    <p>Current Velocity (m/s)</p>
-                </div>
-                <div class="card">
-                    <div class="gauge" id="floodingDurationGauge"></div>
-                    <p>Flooding Duration (min/day)</p>
+            </div>
+            <!-- Optimal species metrics card -->
+            <div class="card optimal-species-card">
+                <h3>Optimal species metrics</h3>
+                <label for="speciesSelect">Select Mangrove Species:</label>
+                <select id="speciesSelect">
+                    <option value="Rhizophora mucronata">Rhizophora mucronata</option>
+                    <option value="Rhizophora apiculata">Rhizophora apiculata</option>
+                    <option value="Rhizophora stylosa">Rhizophora stylosa</option>
+                    <option value="Avicennia marina">Avicennia marina</option>
+                    <option value="Bruguiera gymnnorhiza">Bruguiera gymnnorhiza</option>
+                </select>
+                <div id="speciesMetricsDisplay"></div>
+            </div>
+        </div>
+        <div id="hydrologyGaugesPage" class="page-section" style="display:none;">
+            <div class="gauge-container">
+                <div class="gauge-group">
+                    <div class="card">
+                        <div class="gauge" id="floodingFrequencyGauge"></div>
+                        <p>Flooding Frequency (per day)</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="highTideDurationGauge"></div>
+                        <p>High Tide Duration (min)</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="currentVelocityGauge"></div>
+                        <p>Current Velocity (m/s)</p>
+                    </div>
+                    <div class="card">
+                        <div class="gauge" id="floodingDurationGauge"></div>
+                        <p>Flooding Duration (min/day)</p>
+                    </div>
                 </div>
             </div>
         </div>
         <div id="chartsPage" class="page-section" style="display:none;">
-            <div class="chart-container">
-                <div class="card" id="moistureChartCard">
+            <div class="chart-container" style="flex-direction: column; display: flex; align-items: stretch;">
+                <div style="margin-bottom: 1.5rem; display: flex; justify-content: center;">
+                    <select id="chartSelect" style="font-size: 1.1rem; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #325947;">
+                        <option value="moistureChartCard">Moisture Trend</option>
+                        <option value="humidityChartCard">Humidity Trend</option>
+                        <option value="temperatureChartCard">Temperature Trend</option>
+                        <option value="phChartCard">pH Level Trend</option>
+                        <option value="salinityChartCard">Salinity Trend</option>
+                        <option value="floodingDurationChartCard">Flooding Duration Trend</option>
+                        <option value="floodingFrequencyChartCard">Flooding Frequency Trend</option>
+                        <option value="highTideDurationChartCard">High Tide Duration Trend</option>
+                        <option value="currentVelocityChartCard">Current Velocity Trend</option>
+                    </select>
+                </div>
+                <div id="moistureChartCard" class="card chart-fullwidth">
                     <h3>Moisture Trend</h3>
                     <canvas id="moistureChart"></canvas>
                 </div>
-                <div class="card" id="temperatureChartCard">
+                <div id="humidityChartCard" class="card chart-fullwidth" style="display:none;">
+                    <h3>Humidity Trend</h3>
+                    <canvas id="humidityChart"></canvas>
+                </div>
+                <div id="temperatureChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>Temperature Trend</h3>
                     <canvas id="temperatureChart"></canvas>
                 </div>
-                <div class="card" id="phChartCard">
+                <div id="phChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>pH Level Trend</h3>
                     <canvas id="phChart"></canvas>
                 </div>
-                <div class="card" id="salinityChartCard">
+                <div id="salinityChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>Salinity Trend</h3>
                     <canvas id="salinityChart"></canvas>
                 </div>
-                <div class="card" id="floodingDurationChartCard">
+                <div id="floodingDurationChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>Flooding Duration Trend</h3>
                     <canvas id="floodingDurationChart"></canvas>
                 </div>
-                <div class="card" id="floodingFrequencyChartCard">
+                <div id="floodingFrequencyChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>Flooding Frequency Trend</h3>
                     <canvas id="floodingFrequencyChart"></canvas>
                 </div>
-                <div class="card" id="highTideDurationChartCard">
+                <div id="highTideDurationChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>High Tide Duration Trend</h3>
                     <canvas id="highTideDurationChart"></canvas>
                 </div>
-                <div class="card" id="currentVelocityChartCard">
+                <div id="currentVelocityChartCard" class="card chart-fullwidth" style="display:none;">
                     <h3>Current Velocity Trend</h3>
                     <canvas id="currentVelocityChart"></canvas>
                 </div>
@@ -129,6 +172,7 @@
                                 <tr>
                                     <th>Time</th>
                                     <th>Moisture</th>
+                                    <th>Humidity</th>
                                     <th>Temperature</th>
                                     <th>pH Level</th>
                                     <th>Salinity</th>
@@ -138,6 +182,10 @@
                                 <!-- Soil history data entries will be appended here -->
                             </tbody>
                         </table>
+                        <div class="export-buttons">
+                            <button id="exportSoilHistoryPDF" style="display: inline-block;">Export as PDF</button>
+                            <button id="exportSoilHistoryCSV" style="margin-left: 0.5rem; display: inline-block;">Export as CSV</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -161,6 +209,10 @@
                                 <!-- Water & tide history data entries will be appended here -->
                             </tbody>
                         </table>
+                        <div class="export-buttons">
+                            <button id="exportWaterHistoryPDF" style="display: inline-block;">Export as PDF</button>
+                            <button id="exportWaterHistoryCSV" style="margin-left: 0.5rem; display: inline-block;">Export as CSV</button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -245,6 +297,100 @@
                 .catch(err => { loginError.textContent = err.message; });
         });
     });
+    document.getElementById('exportSoilHistoryPDF').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text('Soil Metrics History', 14, 16);
+        doc.autoTable({
+            html: '#historyTableSoil',
+            startY: 22,
+            styles: {
+                font: 'helvetica',
+                fontSize: 10,
+                cellPadding: 2,
+                textColor: [34, 65, 58],
+                fillColor: [234, 251, 230],
+            },
+            headStyles: {
+                fillColor: [50, 89, 71],
+                textColor: [234, 251, 230],
+            },
+            alternateRowStyles: {
+                fillColor: [61, 92, 71],
+                textColor: [234, 251, 230],
+            },
+            margin: { left: 14, right: 14 }
+        });
+        doc.save('soil_metrics_history.pdf');
+    });
+    document.getElementById('exportWaterHistoryPDF').addEventListener('click', function() {
+        const { jsPDF } = window.jspdf;
+        const doc = new jsPDF();
+        doc.text('Water & Tide Metrics History', 14, 16);
+        doc.autoTable({
+            html: '#historyTableWater',
+            startY: 22,
+            styles: {
+                font: 'helvetica',
+                fontSize: 10,
+                cellPadding: 2,
+                textColor: [34, 65, 58],
+                fillColor: [234, 251, 230],
+            },
+            headStyles: {
+                fillColor: [50, 89, 71],
+                textColor: [234, 251, 230],
+            },
+            alternateRowStyles: {
+                fillColor: [61, 92, 71],
+                textColor: [234, 251, 230],
+            },
+            margin: { left: 14, right: 14 }
+        });
+        doc.save('water_tide_metrics_history.pdf');
+    });
+    document.getElementById('exportSoilHistoryCSV').addEventListener('click', function() {
+        // Convert HTML table to CSV
+        const csv = [];
+        const rows = document.querySelectorAll('#historyTableSoil tr');
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td, th');
+            const csvRow = [];
+            cols.forEach(col => csvRow.push(col.innerText));
+            csv.push(csvRow.join(','));
+        });
+        const csvString = csv.join('\n');
+        // Download CSV file
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'soil_metrics_history.csv');
+        a.click();
+        URL.revokeObjectURL(url);
+    });
+    document.getElementById('exportWaterHistoryCSV').addEventListener('click', function() {
+        // Convert HTML table to CSV
+        const csv = [];
+        const rows = document.querySelectorAll('#historyTableWater tr');
+        rows.forEach(row => {
+            const cols = row.querySelectorAll('td, th');
+            const csvRow = [];
+            cols.forEach(col => csvRow.push(col.innerText));
+            csv.push(csvRow.join(','));
+        });
+        const csvString = csv.join('\n');
+        // Download CSV file
+        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.setAttribute('href', url);
+        a.setAttribute('download', 'water_tide_metrics_history.csv');
+        a.click();
+        URL.revokeObjectURL(url);
+    });
     </script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
 </body>
 </html>
