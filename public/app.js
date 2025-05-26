@@ -517,13 +517,11 @@ function updateSpeciesMetricsCard() {
     const metrics = speciesOptimalMetrics[selected];
     if (metrics) {
         metricsDiv.innerHTML = `
-            <table class="species-metrics-table">
-                <tr><th>Moisture</th><td>${metrics.moisture}</td></tr>
-                <tr><th>Humidity</th><td>${metrics.humidity}</td></tr>
-                <tr><th>Temperature</th><td>${metrics.temperature}</td></tr>
-                <tr><th>pH</th><td>${metrics.ph}</td></tr>
-                <tr><th>Salinity</th><td>${metrics.salinity}</td></tr>
-            </table>
+            <div class="species-metric-row"><span class="species-metric-label">Moisture</span><span class="species-metric-value">${metrics.moisture}</span></div>
+            <div class="species-metric-row"><span class="species-metric-label">Humidity</span><span class="species-metric-value">${metrics.humidity}</span></div>
+            <div class="species-metric-row"><span class="species-metric-label">Temperature</span><span class="species-metric-value">${metrics.temperature}</span></div>
+            <div class="species-metric-row"><span class="species-metric-label">pH</span><span class="species-metric-value">${metrics.ph}</span></div>
+            <div class="species-metric-row"><span class="species-metric-label">Salinity</span><span class="species-metric-value">${metrics.salinity}</span></div>
         `;
     } else {
         metricsDiv.innerHTML = '<em>Select a species to view optimal metrics.</em>';

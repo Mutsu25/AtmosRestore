@@ -434,8 +434,38 @@ footer p {
     font-size: 1rem;
     font-family: 'Inter', sans-serif;
     display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
     justify-content: center;
+    align-items: stretch;
+}
+
+.species-metric-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     align-items: center;
+    background: rgba(44, 70, 56, 0.7);
+    border-radius: 8px;
+    padding: 0.4rem 0.8rem;
+    margin: 0.1rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #eafbe6;
+}
+
+.species-metric-label {
+    color: #8fbc8f;
+    font-weight: 700;
+    font-size: 1rem;
+    margin-right: 1rem;
+}
+
+.species-metric-value {
+    color: #eafbe6;
+    font-weight: 600;
+    font-size: 1rem;
+    text-align: right;
 }
 
 .species-metrics-table {
@@ -444,8 +474,8 @@ footer p {
     border-spacing: 0 0.5rem;
     font-size: 1rem;
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0.5rem 0.7rem; /* Reduce horizontal gap */
+    grid-template-columns: 1fr; /* Single column, split by row */
+    gap: 0.5rem 0;
     margin-top: 0.2rem;
     justify-items: center;
     align-items: center;
