@@ -587,7 +587,7 @@ document.addEventListener('DOMContentLoaded', function() {
             document.getElementById('lastUpdated').textContent = currentTime;
         }
     });
-    // Listen for live temperature updates
+    // anjay rama keren cuy
     firebase.database().ref('/sensor/temperature').on('value', function(snapshot) {
         const value = snapshot.val();
         console.log('Firebase /sensor/temperature value:', value); // Debug log
