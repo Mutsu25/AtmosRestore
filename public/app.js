@@ -135,7 +135,6 @@ const currentVelocityGauge = createGauge({
 });
 
 
-
 setInterval(function() {
     humidityGauge.refresh(getRandomInt(60, 80));
 }, 2000);
@@ -528,6 +527,7 @@ function updateSpeciesMetricsCard() {
     }
 }
 
+
 document.addEventListener('DOMContentLoaded', function() {
     // Listen for live humidity updates (dummy for now)
     setInterval(function() {
@@ -546,9 +546,9 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 2000);
 
     // Listen for live moisture updates
-    firebase.database().ref('/sensor/humidity').on('value', function(snapshot) {
+    firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
         const value = snapshot.val();
-        console.log('Firebase /sensor/humidity value:', value); // Debug log
+        console.log('Firebase /sensor/moisture value:', value); // Debug log
         if (typeof value === 'number') {
             soilData.moisture = value;
             moistureGauge.refresh(value);
@@ -567,12 +567,22 @@ document.addEventListener('DOMContentLoaded', function() {
             newSoilHistoryRow.innerHTML = `
                 <td>${currentTime}</td>
                 <td>${soilData.moisture}</td>
+                <td>${soilData.humidity}</td>
                 <td>${soilData.temperature}</td>
                 <td>${soilData.ph}</td>
                 <td>${soilData.salinity}</td>`;
-            while (soilHistoryTableBody.rows.length > 10) {
+            while (soilHistoryTableBody.rows.length > 25) {
                 soilHistoryTableBody.deleteRow(0);
             }
+            // Store history in Firebase
+            firebase.database().ref('/history/soil').push({
+                time: currentTime,
+                moisture: soilData.moisture,
+                humidity: soilData.humidity,
+                temperature: soilData.temperature,
+                ph: soilData.ph,
+                salinity: soilData.salinity
+            });
             // Update last updated timestamp
             document.getElementById('lastUpdated').textContent = currentTime;
         }
@@ -599,12 +609,22 @@ document.addEventListener('DOMContentLoaded', function() {
             newSoilHistoryRow.innerHTML = `
                 <td>${currentTime}</td>
                 <td>${soilData.moisture}</td>
+                <td>${soilData.humidity}</td>
                 <td>${soilData.temperature}</td>
                 <td>${soilData.ph}</td>
                 <td>${soilData.salinity}</td>`;
-            while (soilHistoryTableBody.rows.length > 10) {
+            while (soilHistoryTableBody.rows.length > 25) {
                 soilHistoryTableBody.deleteRow(0);
             }
+            // Store history in Firebase
+            firebase.database().ref('/history/soil').push({
+                time: currentTime,
+                moisture: soilData.moisture,
+                humidity: soilData.humidity,
+                temperature: soilData.temperature,
+                ph: soilData.ph,
+                salinity: soilData.salinity
+            });
             // Update last updated timestamp
             document.getElementById('lastUpdated').textContent = currentTime;
         }
@@ -631,12 +651,22 @@ document.addEventListener('DOMContentLoaded', function() {
             newSoilHistoryRow.innerHTML = `
                 <td>${currentTime}</td>
                 <td>${soilData.moisture}</td>
+                <td>${soilData.humidity}</td>
                 <td>${soilData.temperature}</td>
                 <td>${soilData.ph}</td>
                 <td>${soilData.salinity}</td>`;
-            while (soilHistoryTableBody.rows.length > 10) {
+            while (soilHistoryTableBody.rows.length > 25) {
                 soilHistoryTableBody.deleteRow(0);
             }
+            // Store history in Firebase
+            firebase.database().ref('/history/soil').push({
+                time: currentTime,
+                moisture: soilData.moisture,
+                humidity: soilData.humidity,
+                temperature: soilData.temperature,
+                ph: soilData.ph,
+                salinity: soilData.salinity
+            });
             // Update last updated timestamp
             document.getElementById('lastUpdated').textContent = currentTime;
         }
@@ -663,12 +693,22 @@ document.addEventListener('DOMContentLoaded', function() {
             newSoilHistoryRow.innerHTML = `
                 <td>${currentTime}</td>
                 <td>${soilData.moisture}</td>
+                <td>${soilData.humidity}</td>
                 <td>${soilData.temperature}</td>
                 <td>${soilData.ph}</td>
                 <td>${soilData.salinity}</td>`;
-            while (soilHistoryTableBody.rows.length > 10) {
+            while (soilHistoryTableBody.rows.length > 25) {
                 soilHistoryTableBody.deleteRow(0);
             }
+            // Store history in Firebase
+            firebase.database().ref('/history/soil').push({
+                time: currentTime,
+                moisture: soilData.moisture,
+                humidity: soilData.humidity,
+                temperature: soilData.temperature,
+                ph: soilData.ph,
+                salinity: soilData.salinity
+            });
             // Update last updated timestamp
             document.getElementById('lastUpdated').textContent = currentTime;
         }
@@ -769,8 +809,8 @@ function updateDashboard() {
         <td>${soilData.highTideDuration}</td>
         <td>${soilData.currentVelocity}</td>`;
 
-    // Limit water & tide history table rows to last 10 entries
-    while (waterHistoryTableBody.rows.length > 10) {
+    // Limit water & tide history table rows to last 25 entries
+    while (waterHistoryTableBody.rows.length > 25) {
         waterHistoryTableBody.deleteRow(0);
     }
 
