@@ -441,14 +441,16 @@ footer p {
 }
 
 .species-metric-row {
+    width: 150%;
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    align-items: center;
+    align-items: justify;
     background: rgba(44, 70, 56, 0.7);
     border-radius: 8px;
-    padding: 0.4rem 0.8rem;
+    padding: .4rem 1.2rem;
     margin: 0.1rem 0;
+    margin-left: -60px;
     font-size: 1rem;
     font-weight: 600;
     color: #eafbe6;
@@ -466,6 +468,16 @@ footer p {
     font-weight: 600;
     font-size: 1rem;
     text-align: right;
+}
+
+.species-metrics-list {
+    width: 100%;
+    max-width: 300px; /* Match dropdown */
+    margin: 0 auto;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .species-metrics-table {

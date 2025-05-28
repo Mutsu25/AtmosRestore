@@ -73,18 +73,59 @@
                     </div>
                 </div>
             </div>
-            <!-- Optimal species metrics card -->
+            <!-- Optimal species metrics card (blank template for manual entry) -->
             <div class="card optimal-species-card">
-                <h3>Optimal species metrics</h3>
+                <h3>Optimal Species Metrics</h3>
                 <label for="speciesSelect">Select Mangrove Species:</label>
                 <select id="speciesSelect">
-                    <option value="Rhizophora mucronata">Rhizophora mucronata</option>
-                    <option value="Rhizophora apiculata">Rhizophora apiculata</option>
-                    <option value="Rhizophora stylosa">Rhizophora stylosa</option>
-                    <option value="Avicennia marina">Avicennia marina</option>
-                    <option value="Bruguiera gymnnorhiza">Bruguiera gymnnorhiza</option>
+                    <option value="mucronata">Rhizophora mucronata</option>
+                    <option value="apiculata">Rhizophora apiculata</option>
+                    <option value="stylosa">Rhizophora stylosa</option>
+                    <option value="avicennia">Avicennia marina</option>
+                    <option value="bruguiera">Bruguiera gymnnorhiza</option>
                 </select>
-                <div id="speciesMetricsDisplay"></div>
+                <div class="card-body">
+                    <!-- Template for Rhizophora mucronata -->
+                    <div id="metrics-mucronata" class="species-metrics-list" style="display: block;">
+                        <div class="species-metric-row"><span class="species-metric-label">Moisture:</span> <span class="species-metric-value">70-90%</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">pH:</span> <span class="species-metric-value">5.3-8.0</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Salinity:</span> <span class="species-metric-value">10-35 ppt</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Temperature:</span> <span class="species-metric-value">20-30 °C</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Humidity:</span> <span class="species-metric-value">70-90%</span></div>
+                    </div>
+                    <!-- Template for Rhizophora apiculata -->
+                    <div id="metrics-apiculata" class="species-metrics-list" style="display: none;">
+                        <div class="species-metric-row"><span class="species-metric-label">Moisture:</span> <span class="species-metric-value">70-90%</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">pH:</span> <span class="species-metric-value">5.5-7.5</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Salinity:</span> <span class="species-metric-value">15-30 ppt</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Temperature:</span> <span class="species-metric-value">24-32 °C</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Humidity:</span> <span class="species-metric-value">70-90%</span></div>
+                    </div>
+                    <!-- Template for Rhizophora stylosa -->
+                    <div id="metrics-stylosa" class="species-metrics-list" style="display: none;">
+                        <div class="species-metric-row"><span class="species-metric-label">Moisture:</span> <span class="species-metric-value">70-90%</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">pH:</span> <span class="species-metric-value">6.0-8.0</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Salinity:</span> <span class="species-metric-value">15-30 ppt</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Temperature:</span> <span class="species-metric-value">22-30 °C</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Humidity:</span> <span class="species-metric-value">70-90%</span></div>
+                    </div>
+                    <!-- Template for Avicennia marina -->
+                    <div id="metrics-avicennia" class="species-metrics-list" style="display: none;">
+                        <div class="species-metric-row"><span class="species-metric-label">Moisture:</span> <span class="species-metric-value">70-90%</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">pH:</span> <span class="species-metric-value">6.0-9.0</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Salinity:</span> <span class="species-metric-value">20-50 ppt</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Temperature:</span> <span class="species-metric-value">18-32 °C</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Humidity:</span> <span class="species-metric-value">70-90%</span></div>
+                    </div>
+                    <!-- Template for Bruguiera gymnnorhiza -->
+                    <div id="metrics-bruguiera" class="species-metrics-list" style="display: none;">
+                        <div class="species-metric-row"><span class="species-metric-label">Moisture:</span> <span class="species-metric-value">70-90%</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">pH:</span> <span class="species-metric-value">6.0-8.0</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Salinity:</span> <span class="species-metric-value">0-35 ppt</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Temperature:</span> <span class="species-metric-value">22-32 °C</span></div>
+                        <div class="species-metric-row"><span class="species-metric-label">Humidity:</span> <span class="species-metric-value">70-90%</span></div>
+                    </div>
+                </div>
             </div>
         </div>
         <div id="hydrologyGaugesPage" class="page-section" style="display:none;">
@@ -112,7 +153,7 @@
         <div id="chartsPage" class="page-section" style="display:none;">
             <div class="chart-container" style="flex-direction: column; display: flex; align-items: stretch;">
                 <div style="margin-bottom: 1.5rem; display: flex; justify-content: center;">
-                    <select id="chartSelect" style="font-size: 1.1rem; padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid #325947;">
+                    <select id="chartSelect" class="optimal-species-card-select" style="font-size: 1rem; padding: 0.5rem 0.8rem; border-radius: 8px; border: 2px solid #000000; background: #264034; color: #eafbe6; max-width: 300px; width: 100%; margin-bottom: 1rem; margin-top: 0.3rem; box-shadow: 0 1px 4px #2f4f2f33; transition: border 0.2s;">
                         <option value="moistureChartCard">Moisture Trend</option>
                         <option value="humidityChartCard">Humidity Trend</option>
                         <option value="temperatureChartCard">Temperature Trend</option>
@@ -388,6 +429,20 @@
         a.setAttribute('download', 'water_tide_metrics_history.csv');
         a.click();
         URL.revokeObjectURL(url);
+    });
+    // Auto-switch optimal species metrics template
+    const speciesSelect = document.getElementById('speciesSelect');
+    const speciesTemplates = [
+      'metrics-mucronata',
+      'metrics-apiculata',
+      'metrics-stylosa',
+      'metrics-avicennia',
+      'metrics-bruguiera'
+    ];
+    speciesSelect.addEventListener('change', function() {
+      speciesTemplates.forEach(id => {
+        document.getElementById(id).style.display = (id === 'metrics-' + this.value) ? 'block' : 'none';
+      });
     });
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>

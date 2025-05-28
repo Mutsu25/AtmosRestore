@@ -135,19 +135,31 @@ const currentVelocityGauge = createGauge({
 });
 
 
-// setInterval(function() {
-//     humidityGauge.refresh(getRandomInt(60, 80));
-// }, 2000);
+// =====================
+// Chart Update Helper
+// =====================
+function updateChart(chart, value) {
+    const currentTime = new Date().toLocaleTimeString();
+    chart.data.labels.push(currentTime);
+    chart.data.datasets[0].data.push(value);
+    if (chart.data.labels.length > 20) {
+        chart.data.labels.shift();
+        chart.data.datasets[0].data.shift();
+    }
+    chart.update();
+}
 
-// Dummy data for humidity chart
+// =====================
+// Chart Initializations
+// =====================
 var humidityChartCtx = document.getElementById('humidityChart').getContext('2d');
 var humidityChart = new Chart(humidityChartCtx, {
     type: 'line',
     data: {
-        labels: [], // Start with empty labels
+        labels: [],
         datasets: [{
             label: 'Humidity (%)',
-            data: [], // Start with empty data
+            data: [],
             borderColor: '#0097a7',
             fill: true,
             tension: 0.4
@@ -165,394 +177,264 @@ var humidityChart = new Chart(humidityChartCtx, {
     }
 });
 
-const moistureCtx = document.getElementById('moistureChart').getContext('2d');
-const temperatureCtx = document.getElementById('temperatureChart').getContext('2d');
-const phCtx = document.getElementById('phChart').getContext('2d');
-const salinityCtx = document.getElementById('salinityChart').getContext('2d');
-const floodingDurationCtx = document.getElementById('floodingDurationChart').getContext('2d');
-const floodingFrequencyCtx = document.getElementById('floodingFrequencyChart').getContext('2d');
-const highTideDurationCtx = document.getElementById('highTideDurationChart').getContext('2d');
-const currentVelocityCtx = document.getElementById('currentVelocityChart').getContext('2d');
-const moistureChart = new Chart(moistureCtx, {
+var moistureChartCtx = document.getElementById('moistureChart').getContext('2d');
+var moistureChart = new Chart(moistureChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Moisture (%)',
-            data: moistureData,
+            data: [],
             borderColor: '#4caf50',
-            borderWidth: 2,
-            fill: true
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 100 }
         }
     }
 });
 
-const temperatureChart = new Chart(temperatureCtx, {
+var temperatureChartCtx = document.getElementById('temperatureChart').getContext('2d');
+var temperatureChart = new Chart(temperatureChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Temperature (°C)',
-            data: temperatureData,
+            data: [],
             borderColor: '#ffa726',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 50 }
         }
     }
 });
 
-const phChart = new Chart(phCtx, {
+var phChartCtx = document.getElementById('phChart').getContext('2d');
+var phChart = new Chart(phChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'pH Level',
-            data: phData,
+            data: [],
             borderColor: '#3cba9f',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: false,
-                suggestedMin: 0,
-                suggestedMax: 14,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: false, suggestedMin: 0, suggestedMax: 14 }
         }
     }
 });
 
-const salinityChart = new Chart(salinityCtx, {
+var salinityChartCtx = document.getElementById('salinityChart').getContext('2d');
+var salinityChart = new Chart(salinityChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Salinity (ppt)',
-            data: salinityData,
+            data: [],
             borderColor: '#a0522d',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 50,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, suggestedMax: 50 }
         }
     }
 });
 
-
-const floodingDurationChart = new Chart(floodingDurationCtx, {
+// =====================
+// Hydrology Chart Initializations (MUST be present for dummy data to update charts)
+// =====================
+var floodingDurationChartCtx = document.getElementById('floodingDurationChart').getContext('2d');
+var floodingDurationChart = new Chart(floodingDurationChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Flooding Duration (min/day)',
-            data: floodingDurationData,
-            borderColor: '#4caf50',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            data: [],
+            borderColor: '#1976d2',
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 400,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 400 }
         }
     }
 });
 
-const floodingFrequencyChart = new Chart(floodingFrequencyCtx, {
+var floodingFrequencyChartCtx = document.getElementById('floodingFrequencyChart').getContext('2d');
+var floodingFrequencyChart = new Chart(floodingFrequencyChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Flooding Frequency (per day)',
-            data: floodingFrequencyData,
-            borderColor: '#4caf50',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            data: [],
+            borderColor: '#388e3c',
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 3,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 3 }
         }
     }
 });
 
-const highTideDurationChart = new Chart(highTideDurationCtx, {
+var highTideDurationChartCtx = document.getElementById('highTideDurationChart').getContext('2d');
+var highTideDurationChart = new Chart(highTideDurationChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'High Tide Duration (min)',
-            data: highTideDurationData,
-            borderColor: '#4caf50',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            data: [],
+            borderColor: '#fbc02d',
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 300,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 300 }
         }
     }
 });
 
-const currentVelocityChart = new Chart(currentVelocityCtx, {
+var currentVelocityChartCtx = document.getElementById('currentVelocityChart').getContext('2d');
+var currentVelocityChart = new Chart(currentVelocityChartCtx, {
     type: 'line',
     data: {
-        labels: labels,
+        labels: [],
         datasets: [{
             label: 'Current Velocity (m/s)',
-            data: currentVelocityData,
-            decimals: 2,
-            borderColor: '#4caf50',
-            borderWidth: 2,
-            tension: 0.4,
-            fill: true
+            data: [],
+            borderColor: '#0288d1',
+            fill: true,
+            tension: 0.4
         }]
     },
     options: {
-        scales: {
-            y: {
-                beginAtZero: true,
-                suggestedMax: 0.2,
-                ticks: {//
-                }
-            },
-            x: {
-                ticks: {//
-                }
-            }
-        },
         responsive: true,
         plugins: {
-            legend: {
-                position: 'top',
-                labels: {//
-                }
-            }
+            legend: { display: true },
+            title: { display: false }
+        },
+        scales: {
+            y: { beginAtZero: true, max: 1 }
         }
     }
 });
 
-// === Optimal Species Metrics Card Logic ===
-const speciesOptimalMetrics = {
-    'Rhizophora mucronata': {
-        moisture: '60-80%',
-        humidity: '70-90%',
-        temperature: '25-32°C',
-        ph: '5.5-7.5',
-        salinity: '15-30 ppt'
-    },
-    'Rhizophora apiculata': {
-        moisture: '60-80%',
-        humidity: '70-90%',
-        temperature: '25-32°C',
-        ph: '5.5-7.5',
-        salinity: '15-30 ppt'
-    },
-    'Rhizophora stylosa': {
-        moisture: '60-80%',
-        humidity: '70-90%',
-        temperature: '25-32°C',
-        ph: '5.5-7.5',
-        salinity: '5-25 ppt'
-    },
-    'Avicennia marina': {
-        moisture: '50-70%',
-        humidity: '60-85%',
-        temperature: '20-35°C',
-        ph: '6.0-8.0',
-        salinity: '15-50 ppt'
-    },
-    'Bruguiera gymnnorhiza': {
-        moisture: '60-80%',
-        humidity: '70-90%',
-        temperature: '25-32°C',
-        ph: '5.5-7.5',
-        salinity: '10-35 ppt'
-    }
-};
-
-function updateSpeciesMetricsCard() {
-    const select = document.getElementById('speciesSelect');
-    const metricsDiv = document.getElementById('speciesMetricsDisplay');
-    const selected = select.value;
-    const metrics = speciesOptimalMetrics[selected];
-    if (metrics) {
-        metricsDiv.innerHTML = `
-            <div class="species-metric-row"><span class="species-metric-label">Moisture</span><span class="species-metric-value">${metrics.moisture}</span></div>
-            <div class="species-metric-row"><span class="species-metric-label">Humidity</span><span class="species-metric-value">${metrics.humidity}</span></div>
-            <div class="species-metric-row"><span class="species-metric-label">Temperature</span><span class="species-metric-value">${metrics.temperature}</span></div>
-            <div class="species-metric-row"><span class="species-metric-label">pH</span><span class="species-metric-value">${metrics.ph}</span></div>
-            <div class="species-metric-row"><span class="species-metric-label">Salinity</span><span class="species-metric-value">${metrics.salinity}</span></div>
-        `;
-    } else {
-        metricsDiv.innerHTML = '<em>Select a species to view optimal metrics.</em>';
-    }
-}
-
-
+// =====================
+// Firebase Listeners (Charts & Gauges)
+// =====================
 document.addEventListener('DOMContentLoaded', function() {
-    // Listen for live humidity updates from Firebase
+    // Humidity
     firebase.database().ref('/sensor/humidity').on('value', function(snapshot) {
         const value = snapshot.val();
         if (typeof value === 'number') {
             soilData.humidity = value;
             humidityGauge.refresh(value);
-            const currentTime = new Date().toLocaleTimeString();
-            // Update humidity chart
-            humidityChart.data.labels.push(currentTime);
-            humidityChart.data.datasets[0].data.push(value);
-            if (humidityChart.data.labels.length > 20) {
-                humidityChart.data.labels.shift();
-                humidityChart.data.datasets[0].data.shift();
-            }
-            humidityChart.update();
+            updateChart(humidityChart, value);
         }
     });
-
-    // Listen for live moisture updates
+    // Moisture
     firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
         const value = snapshot.val();
         if (typeof value === 'number') {
             soilData.moisture = value;
             moistureGauge.refresh(value);
-            // Update chart
+            updateChart(moistureChart, value);
+        }
+    });
+    // Temperature
+    firebase.database().ref('/sensor/temperature').on('value', function(snapshot) {
+        const value = snapshot.val();
+        if (typeof value === 'number') {
+            soilData.temperature = value;
+            temperatureGauge.refresh(value);
+            updateChart(temperatureChart, value);
+        }
+    });
+    // pH
+    firebase.database().ref('/sensor/ph').on('value', function(snapshot) {
+        const value = snapshot.val();
+        if (typeof value === 'number') {
+            soilData.ph = value;
+            phGauge.refresh(value);
+            updateChart(phChart, value);
+        }
+    });
+    // Salinity
+    firebase.database().ref('/sensor/salinity').on('value', function(snapshot) {
+        const value = snapshot.val();
+        if (typeof value === 'number') {
+            soilData.salinity = value;
+            salinityGauge.refresh(value);
+            updateChart(salinityChart, value);
+        }
+    });
+    // Moisture Firebase listener
+    firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
+        const value = snapshot.val();
+        if (typeof value === 'number') {
+            soilData.moisture = value;
+            moistureGauge.refresh(value);
             const currentTime = new Date().toLocaleTimeString();
             moistureChart.data.labels.push(currentTime);
             moistureChart.data.datasets[0].data.push(value);
@@ -561,18 +443,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 moistureChart.data.datasets[0].data.shift();
             }
             moistureChart.update();
-            // DO NOT update soil history table or push to Firebase here
         }
     });
-    // anjay rama keren cuy
+
+    // Temperature Firebase listener
     firebase.database().ref('/sensor/temperature').on('value', function(snapshot) {
         const value = snapshot.val();
-        console.log('Firebase /sensor/temperature value:', value); // Debug log
         if (typeof value === 'number') {
             soilData.temperature = value;
             temperatureGauge.refresh(value);
             const currentTime = new Date().toLocaleTimeString();
-            // Update chart
             temperatureChart.data.labels.push(currentTime);
             temperatureChart.data.datasets[0].data.push(value);
             if (temperatureChart.data.labels.length > 20) {
@@ -580,37 +460,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 temperatureChart.data.datasets[0].data.shift();
             }
             temperatureChart.update();
-            // DO NOT update soil history table or push to Firebase here
         }
     });
-    // Listen for live salinity updates
-    firebase.database().ref('/sensor/salinity').on('value', function(snapshot) {
-        const value = snapshot.val();
-        console.log('Firebase /sensor/salinity value:', value); // Debug log
-        if (typeof value === 'number') {
-            soilData.salinity = value;
-            salinityGauge.refresh(value);
-            const currentTime = new Date().toLocaleTimeString();
-            // Update chart
-            salinityChart.data.labels.push(currentTime);
-            salinityChart.data.datasets[0].data.push(value);
-            if (salinityChart.data.labels.length > 20) {
-                salinityChart.data.labels.shift();
-                salinityChart.data.datasets[0].data.shift();
-            }
-            salinityChart.update();
-            // DO NOT update soil history table or push to Firebase here
-        }
-    });
-    // Listen for live ph updates
+
+    // pH Firebase listener
     firebase.database().ref('/sensor/ph').on('value', function(snapshot) {
         const value = snapshot.val();
-        console.log('Firebase /sensor/ph value:', value); // Debug log
         if (typeof value === 'number') {
             soilData.ph = value;
             phGauge.refresh(value);
             const currentTime = new Date().toLocaleTimeString();
-            // Update chart
             phChart.data.labels.push(currentTime);
             phChart.data.datasets[0].data.push(value);
             if (phChart.data.labels.length > 20) {
@@ -618,16 +477,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 phChart.data.datasets[0].data.shift();
             }
             phChart.update();
-            // DO NOT update soil history table or push to Firebase here
         }
     });
 
-    // Optimal species metrics card setup
-    const speciesSelect = document.getElementById('speciesSelect');
-    if (speciesSelect) {
-        speciesSelect.addEventListener('change', updateSpeciesMetricsCard);
-        updateSpeciesMetricsCard(); // Initialize on load
-    }
+    // Salinity Firebase listener
+    firebase.database().ref('/sensor/salinity').on('value', function(snapshot) {
+        const value = snapshot.val();
+        if (typeof value === 'number') {
+            soilData.salinity = value;
+            salinityGauge.refresh(value);
+            const currentTime = new Date().toLocaleTimeString();
+            salinityChart.data.labels.push(currentTime);
+            salinityChart.data.datasets[0].data.push(value);
+            if (salinityChart.data.labels.length > 20) {
+                salinityChart.data.labels.shift();
+                salinityChart.data.datasets[0].data.shift();
+            }
+            salinityChart.update();
+        }
+    });
 
     // Chart dropdown logic
     const chartSelect = document.getElementById('chartSelect');
@@ -670,91 +538,156 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAllReadings();
     // Update every 5 seconds
     setInterval(updateAllReadings, 5000);
+
+    // Fetch latest water/tide history from Firebase on page load
+    if (typeof fetchLastWaterHistoryFromFirebase === 'function') {
+        fetchLastWaterHistoryFromFirebase();
+    } else {
+        // Fallback: implement fetchLastWaterHistoryFromFirebase inline if not defined
+        function fetchLastWaterHistoryFromFirebase() {
+            const waterHistoryTable = document.getElementById('historyTableWater');
+            if (!waterHistoryTable) return;
+            const waterHistoryTableBody = waterHistoryTable.getElementsByTagName('tbody')[0];
+            if (!waterHistoryTableBody) return;
+            // Clear table
+            waterHistoryTableBody.innerHTML = '';
+            // Fetch last 25 water/tide history entries from Firebase
+            firebase.database().ref('/history/water').limitToLast(25).once('value', function(snapshot) {
+                const data = snapshot.val();
+                if (!data) return;
+                // Sort by time if possible (Firebase returns as object)
+                const entries = Object.values(data);
+                // Optionally sort by time if needed (assuming time is a string, so keep as is)
+                entries.forEach(entry => {
+                    const row = waterHistoryTableBody.insertRow();
+                    row.innerHTML = `
+                        <td>${entry.time || ''}</td>
+                        <td>${entry.floodingDuration || 0}</td>
+                        <td>${entry.floodingFrequency || 0}</td>
+                        <td>${entry.highTideDuration || 0}</td>
+                        <td>${entry.currentVelocity || 0}</td>`;
+                });
+                // Update hydrology charts with fetched data
+                floodingDurationChart.data.labels = entries.map(e => e.time || '');
+                floodingDurationChart.data.datasets[0].data = entries.map(e => e.floodingDuration || 0);
+                floodingDurationChart.update();
+                floodingFrequencyChart.data.labels = entries.map(e => e.time || '');
+                floodingFrequencyChart.data.datasets[0].data = entries.map(e => e.floodingFrequency || 0);
+                floodingFrequencyChart.update();
+                highTideDurationChart.data.labels = entries.map(e => e.time || '');
+                highTideDurationChart.data.datasets[0].data = entries.map(e => e.highTideDuration || 0);
+                highTideDurationChart.update();
+                currentVelocityChart.data.labels = entries.map(e => e.time || '');
+                currentVelocityChart.data.datasets[0].data = entries.map(e => e.currentVelocity || 0);
+                currentVelocityChart.update();
+                // Set last updated time to the most recent entry's time
+                if (entries.length > 0) {
+                    const lastEntry = entries[entries.length - 1];
+                    const lastUpdated = document.getElementById('lastUpdated');
+                    if (lastUpdated && lastEntry.time) {
+                        lastUpdated.textContent = lastEntry.time;
+                    }
+                }
+            });
+        }
+        fetchLastWaterHistoryFromFirebase();
+    }
+
 });
 
-function updateDashboard() {
-    // Only update static/dummy data here
+// =====================
+// DUMMY DATA FOR HYDROLOGY METRICS (until real sensors are available)
+// =====================
+function updateHydrologyDummyData() {
+    // Generate dummy data for hydrology metrics only
     soilData.floodingDuration = parseFloat((Math.random() * 400).toFixed(2));
     soilData.floodingFrequency = parseFloat((Math.random() * 3).toFixed(2));
     soilData.highTideDuration = parseFloat((Math.random() * 300).toFixed(2));
     soilData.currentVelocity = parseFloat((Math.random() * 0.99 + 0.01).toFixed(2));
 
-    // Update gauges with new values
+    // Update hydrology gauges with new dummy values
     floodingDurationGauge.refresh(soilData.floodingDuration);
     floodingFrequencyGauge.refresh(soilData.floodingFrequency);
     highTideDurationGauge.refresh(soilData.highTideDuration);
     currentVelocityGauge.refresh(soilData.currentVelocity);
 
-    // Update chart datasets with new values (ONLY for static/dummy metrics)
-    const currentTime = new Date().toLocaleTimeString();
-    floodingDurationChart.data.labels.push(currentTime);
-    floodingDurationChart.data.datasets[0].data.push(soilData.floodingDuration);
-    if (floodingDurationChart.data.labels.length > 20) {
-        floodingDurationChart.data.labels.shift();
-        floodingDurationChart.data.datasets[0].data.shift();
+    // Defensive: check if charts exist before updating
+    if (typeof floodingDurationChart !== 'undefined' && floodingDurationChart.data) {
+        const currentTime = new Date().toLocaleTimeString();
+        floodingDurationChart.data.labels.push(currentTime);
+        floodingDurationChart.data.datasets[0].data.push(soilData.floodingDuration);
+        if (floodingDurationChart.data.labels.length > 20) {
+            floodingDurationChart.data.labels.shift();
+            floodingDurationChart.data.datasets[0].data.shift();
+        }
+        floodingDurationChart.update();
+    }
+    if (typeof floodingFrequencyChart !== 'undefined' && floodingFrequencyChart.data) {
+        const currentTime = new Date().toLocaleTimeString();
+        floodingFrequencyChart.data.labels.push(currentTime);
+        floodingFrequencyChart.data.datasets[0].data.push(soilData.floodingFrequency);
+        if (floodingFrequencyChart.data.labels.length > 20) {
+            floodingFrequencyChart.data.labels.shift();
+            floodingFrequencyChart.data.datasets[0].data.shift();
+        }
+        floodingFrequencyChart.update();
+    }
+    if (typeof highTideDurationChart !== 'undefined' && highTideDurationChart.data) {
+        const currentTime = new Date().toLocaleTimeString();
+        highTideDurationChart.data.labels.push(currentTime);
+        highTideDurationChart.data.datasets[0].data.push(soilData.highTideDuration);
+        if (highTideDurationChart.data.labels.length > 20) {
+            highTideDurationChart.data.labels.shift();
+            highTideDurationChart.data.datasets[0].data.shift();
+        }
+        highTideDurationChart.update();
+    }
+    if (typeof currentVelocityChart !== 'undefined' && currentVelocityChart.data) {
+        const currentTime = new Date().toLocaleTimeString();
+        currentVelocityChart.data.labels.push(currentTime);
+        currentVelocityChart.data.datasets[0].data.push(soilData.currentVelocity);
+        if (currentVelocityChart.data.labels.length > 20) {
+            currentVelocityChart.data.labels.shift();
+            currentVelocityChart.data.datasets[0].data.shift();
+        }
+        currentVelocityChart.update();
     }
 
-    floodingFrequencyChart.data.labels.push(currentTime);
-    floodingFrequencyChart.data.datasets[0].data.push(soilData.floodingFrequency);
-    if (floodingFrequencyChart.data.labels.length > 20) {
-        floodingFrequencyChart.data.labels.shift();
-        floodingFrequencyChart.data.datasets[0].data.shift();
+    // Append a new row to the water & tide history table with dummy hydrology data
+    const waterHistoryTable = document.getElementById('historyTableWater');
+    if (waterHistoryTable) {
+        const waterHistoryTableBody = waterHistoryTable.getElementsByTagName('tbody')[0];
+        if (waterHistoryTableBody) {
+            const newWaterHistoryRow = waterHistoryTableBody.insertRow();
+            newWaterHistoryRow.innerHTML = `
+                <td>${new Date().toLocaleTimeString()}</td>
+                <td>${soilData.floodingDuration}</td>
+                <td>${soilData.floodingFrequency}</td>
+                <td>${soilData.highTideDuration}</td>
+                <td>${soilData.currentVelocity}</td>`;
+            // Limit water & tide history table rows to last 25 entries
+            while (waterHistoryTableBody.rows.length > 25) {
+                waterHistoryTableBody.deleteRow(0);
+            }
+        }
     }
 
-    highTideDurationChart.data.labels.push(currentTime);
-    highTideDurationChart.data.datasets[0].data.push(soilData.highTideDuration);
-    if (highTideDurationChart.data.labels.length > 20) {
-        highTideDurationChart.data.labels.shift();
-        highTideDurationChart.data.datasets[0].data.shift();
-    }
-
-    currentVelocityChart.data.labels.push(currentTime);
-    currentVelocityChart.data.datasets[0].data.push(soilData.currentVelocity);
-    if (currentVelocityChart.data.labels.length > 20) {
-        currentVelocityChart.data.labels.shift();
-        currentVelocityChart.data.datasets[0].data.shift();
-    }
-
-
-    // Append a new row to the soil history table (REMOVE moisture/temperature/salinity row here)
-    // const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
-    // const newSoilHistoryRow = soilHistoryTableBody.insertRow();
-    // newSoilHistoryRow.innerHTML = `
-    //     <td>${currentTime}</td>
-    //     <td>${soilData.moisture}</td>
-    //     <td>${soilData.temperature}</td>
-    //     <td>${soilData.ph}</td>
-    //     <td>${soilData.salinity}</td>`;
-
-    // Append a new row to the water & tide history table
-    const waterHistoryTableBody = document.getElementById('historyTableWater').getElementsByTagName('tbody')[0];
-    const newWaterHistoryRow = waterHistoryTableBody.insertRow();
-    newWaterHistoryRow.innerHTML = `
-        <td>${currentTime}</td>
-        <td>${soilData.floodingDuration}</td>
-        <td>${soilData.floodingFrequency}</td>
-        <td>${soilData.highTideDuration}</td>
-        <td>${soilData.currentVelocity}</td>`;
-
-    // Limit water & tide history table rows to last 25 entries
-    while (waterHistoryTableBody.rows.length > 25) {
-        waterHistoryTableBody.deleteRow(0);
-    }
-
-    // Update charts
-    phChart.update();
-    salinityChart.update();
-    floodingDurationChart.update();
-    floodingFrequencyChart.update();
-    highTideDurationChart.update();
-    currentVelocityChart.update();
+    // Save to Firebase
+    firebase.database().ref('/history/water').push({
+        time: new Date().toLocaleTimeString(),
+        floodingDuration: soilData.floodingDuration,
+        floodingFrequency: soilData.floodingFrequency,
+        highTideDuration: soilData.highTideDuration,
+        currentVelocity: soilData.currentVelocity
+    });
 
     // Update last updated timestamp
-    document.getElementById('lastUpdated').textContent = currentTime;
+    const lastUpdated = document.getElementById('lastUpdated');
+    if (lastUpdated) lastUpdated.textContent = new Date().toLocaleTimeString();
 }
 
-// Set interval to update charts and data log every 3 seconds
-setInterval(updateDashboard, 3000);
+// Set interval to update hydrology charts and water/tide history table every 5 seconds
+setInterval(updateHydrologyDummyData, 5000);
 
 function populateInitialHistory() {
     const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
@@ -891,7 +824,4 @@ function updateSoilHistoryTableAndFirebase() {
 }
 
 // Remove per-sensor history table/Firebase updates:
-// (Remove the code block in each sensor's .on('value') that adds a row and pushes to Firebase)
-
-// Add a single interval for history update:
-setInterval(updateSoilHistoryTableAndFirebase, 5000);
+// (Remove the code block in each sensor's .on('value') that adds a row and pushes a
