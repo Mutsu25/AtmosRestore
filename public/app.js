@@ -384,6 +384,75 @@ var currentVelocityChart = new Chart(currentVelocityChartCtx, {
 // Firebase Listeners (Charts & Gauges)
 // =====================
 document.addEventListener('DOMContentLoaded', function() {
+    // Fetch latest soil measurement history from Firebase on page load
+    function fetchLastSoilHistoryFromFirebase() {
+        const soilHistoryTable = document.getElementById('historyTableSoil');
+        if (!soilHistoryTable) return;
+        const soilHistoryTableBody = soilHistoryTable.getElementsByTagName('tbody')[0];
+        if (!soilHistoryTableBody) return;
+        // Clear table
+        soilHistoryTableBody.innerHTML = '';
+        // Fetch last 25 soil history entries from Firebase
+        firebase.database().ref('/history/soil').limitToLast(25).once('value', function(snapshot) {
+            const data = snapshot.val();
+            if (!data) return;
+            const entries = Object.values(data);
+            entries.forEach(entry => {
+                const row = soilHistoryTableBody.insertRow();
+                row.innerHTML = `
+                    <td>${entry.time || ''}</td>
+                    <td>${entry.moisture || 0}</td>
+                    <td>${entry.humidity || 0}</td>
+                    <td>${entry.temperature || 0}</td>
+                    <td>${entry.ph || 0}</td>
+                    <td>${entry.salinity || 0}</td>`;
+            });
+            // Update soil measurement charts with fetched data
+            moistureChart.data.labels = entries.map(e => e.time || '');
+            moistureChart.data.datasets[0].data = entries.map(e => e.moisture || 0);
+            moistureChart.update();
+            
+            humidityChart.data.labels = entries.map(e => e.time || '');
+            humidityChart.data.datasets[0].data = entries.map(e => e.humidity || 0);
+            humidityChart.update();
+            
+            temperatureChart.data.labels = entries.map(e => e.time || '');
+            temperatureChart.data.datasets[0].data = entries.map(e => e.temperature || 0);
+            temperatureChart.update();
+            
+            phChart.data.labels = entries.map(e => e.time || '');
+            phChart.data.datasets[0].data = entries.map(e => e.ph || 0);
+            phChart.update();
+            
+            salinityChart.data.labels = entries.map(e => e.time || '');
+            salinityChart.data.datasets[0].data = entries.map(e => e.salinity || 0);
+            salinityChart.update();
+
+            // Update soil data with latest values
+            if (entries.length > 0) {
+                const lastEntry = entries[entries.length - 1];
+                soilData.moisture = lastEntry.moisture || soilData.moisture;
+                soilData.humidity = lastEntry.humidity || soilData.humidity;
+                soilData.temperature = lastEntry.temperature || soilData.temperature;
+                soilData.ph = lastEntry.ph || soilData.ph;
+                soilData.salinity = lastEntry.salinity || soilData.salinity;
+                
+                // Update gauges with latest values
+                moistureGauge.refresh(soilData.moisture);
+                humidityGauge.refresh(soilData.humidity);
+                temperatureGauge.refresh(soilData.temperature);
+                phGauge.refresh(soilData.ph);
+                salinityGauge.refresh(soilData.salinity);
+
+                // Update last updated timestamp
+                const lastUpdated = document.getElementById('lastUpdated');
+                if (lastUpdated && lastEntry.time) {
+                    lastUpdated.textContent = lastEntry.time;
+                }
+            }
+        });
+    }
+
     // Humidity
     firebase.database().ref('/sensor/humidity').on('value', function(snapshot) {
         const value = snapshot.val();
@@ -526,10 +595,6 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof updateGauges === 'function') updateGauges();
         // Update charts
         if (typeof updateCharts === 'function') updateCharts();
-        // Update soil history (latest 25)
-        if (typeof fetchAndRenderSoilHistory === 'function') fetchAndRenderSoilHistory();
-        // Update water history (latest 25)
-        if (typeof fetchAndRenderWaterHistory === 'function') fetchAndRenderWaterHistory();
         // Update full soil history (if present)
         if (typeof fetchAndRenderFullSoilHistory === 'function') fetchAndRenderFullSoilHistory();
     }
@@ -538,6 +603,12 @@ document.addEventListener('DOMContentLoaded', function() {
     updateAllReadings();
     // Update every 5 seconds
     setInterval(updateAllReadings, 5000);
+
+    // Initial fetch of histories from Firebase (only once on page load)
+    fetchLastSoilHistoryFromFirebase();
+    if (typeof fetchLastWaterHistoryFromFirebase === 'function') {
+        fetchLastWaterHistoryFromFirebase();
+    }
 
     // Fetch latest water/tide history from Firebase on page load
     if (typeof fetchLastWaterHistoryFromFirebase === 'function') {
@@ -798,18 +869,7 @@ function exportTableToCSV(tableId, filename) {
 let lastSoilHistoryUpdate = 0;
 function updateSoilHistoryTableAndFirebase() {
     const currentTime = new Date().toLocaleTimeString();
-    const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
-    const newSoilHistoryRow = soilHistoryTableBody.insertRow();
-    newSoilHistoryRow.innerHTML = `
-        <td>${currentTime}</td>
-        <td>${soilData.moisture}</td>
-        <td>${soilData.humidity}</td>
-        <td>${soilData.temperature}</td>
-        <td>${soilData.ph}</td>
-        <td>${soilData.salinity}</td>`;
-    while (soilHistoryTableBody.rows.length > 25) {
-        soilHistoryTableBody.deleteRow(0);
-    }
+
     // Store history in Firebase
     firebase.database().ref('/history/soil').push({
         time: currentTime,
@@ -819,9 +879,24 @@ function updateSoilHistoryTableAndFirebase() {
         ph: soilData.ph,
         salinity: soilData.salinity
     });
+
     // Update last updated timestamp
     document.getElementById('lastUpdated').textContent = currentTime;
+
+    // Only do a local update to the table to prevent unnecessary refreshes
+    const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
+    if (soilHistoryTableBody) {
+        const newSoilHistoryRow = soilHistoryTableBody.insertRow();
+        newSoilHistoryRow.innerHTML = `
+            <td>${currentTime}</td>
+            <td>${soilData.moisture}</td>
+            <td>${soilData.humidity}</td>
+            <td>${soilData.temperature}</td>
+            <td>${soilData.ph}</td>
+            <td>${soilData.salinity}</td>`;
+        while (soilHistoryTableBody.rows.length > 25) {
+            soilHistoryTableBody.deleteRow(0);
+        }
+    }
 }
 
-// Remove per-sensor history table/Firebase updates:
-// (Remove the code block in each sensor's .on('value') that adds a row and pushes a
