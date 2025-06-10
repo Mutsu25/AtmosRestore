@@ -13,15 +13,15 @@ const currentVelocityData = [];
 
 // Added new metrics: floodingDuration, floodingFrequency, highTideDuration, currentVelocity
 const soilData = {
-    moisture: 40,
-    humidity: 70, // Add humidity to soilData
-    temperature: 25,
-    ph: 6.5,
-    salinity: 1.2,
-    floodingDuration: 300, // in minutes per day
-    floodingFrequency: 1.2, // per day
-    highTideDuration: 220, // in minutes
-    currentVelocity: 0.11, // in m/s
+    moisture: null,
+    humidity: null, // Add humidity to soilData
+    temperature: null,
+    ph: null,
+    salinity: null,
+    floodingDuration: null, // in minutes per day
+    floodingFrequency: null, // per day
+    highTideDuration: null, // in minutes
+    currentVelocity: null, // in m/s
     history: [
         { time: 'Starting', moisture: 0, humidity: 0, temperature: 0, ph: 0, salinity: 0,
           floodingDuration: 0, floodingFrequency: 0, highTideDuration: 0, currentVelocity: 0 },
@@ -398,14 +398,13 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!data) return;
             const entries = Object.values(data);
             entries.forEach(entry => {
-                const row = soilHistoryTableBody.insertRow();
-                row.innerHTML = `
+                const row = soilHistoryTableBody.insertRow();                row.innerHTML = `
                     <td>${entry.time || ''}</td>
                     <td>${entry.moisture || 0}</td>
                     <td>${entry.humidity || 0}</td>
                     <td>${entry.temperature || 0}</td>
                     <td>${entry.ph || 0}</td>
-                    <td>${entry.salinity || 0}</td>`;
+                    <td>${(entry.salinity || 0).toFixed(2)}</td>`;
             });
             // Update soil measurement charts with fetched data
             moistureChart.data.labels = entries.map(e => e.time || '');
@@ -597,6 +596,8 @@ document.addEventListener('DOMContentLoaded', function() {
         if (typeof updateCharts === 'function') updateCharts();
         // Update full soil history (if present)
         if (typeof fetchAndRenderFullSoilHistory === 'function') fetchAndRenderFullSoilHistory();
+        // Update soil history table and Firebase
+        updateSoilHistoryTableAndFirebase();
     }
 
     // Initial call
@@ -769,14 +770,14 @@ function populateInitialHistory() {
     waterHistoryTableBody.innerHTML = '';
 
     // Populate initial soil history data
-    soilData.history.forEach(entry => {
-        const soilRow = soilHistoryTableBody.insertRow();
+    soilData.history.forEach(entry => {        const soilRow = soilHistoryTableBody.insertRow();
         soilRow.innerHTML = `
             <td>${entry.time}</td>
             <td>${entry.moisture}</td>
+            <td>${entry.humidity}</td>
             <td>${entry.temperature}</td>
             <td>${entry.ph}</td>
-            <td>${entry.salinity}</td>
+            <td>${(entry.salinity || 0).toFixed(2)}</td>
         `;
     });
 
@@ -867,7 +868,15 @@ function exportTableToCSV(tableId, filename) {
 
 // --- AGGREGATE SOIL HISTORY UPDATE EVERY 5 SECONDS ---
 let lastSoilHistoryUpdate = 0;
-function updateSoilHistoryTableAndFirebase() {
+function updateSoilHistoryTableAndFirebase() {    // Don't update if we're still using the initial null values
+    if (soilData.moisture === null || 
+        soilData.humidity === null || 
+        soilData.temperature === null || 
+        soilData.ph === null || 
+        soilData.salinity === null) {
+        return;
+    }
+
     const currentTime = new Date().toLocaleTimeString();
 
     // Store history in Firebase
@@ -886,14 +895,13 @@ function updateSoilHistoryTableAndFirebase() {
     // Only do a local update to the table to prevent unnecessary refreshes
     const soilHistoryTableBody = document.getElementById('historyTableSoil').getElementsByTagName('tbody')[0];
     if (soilHistoryTableBody) {
-        const newSoilHistoryRow = soilHistoryTableBody.insertRow();
-        newSoilHistoryRow.innerHTML = `
+        const newSoilHistoryRow = soilHistoryTableBody.insertRow();        newSoilHistoryRow.innerHTML = `
             <td>${currentTime}</td>
             <td>${soilData.moisture}</td>
             <td>${soilData.humidity}</td>
             <td>${soilData.temperature}</td>
             <td>${soilData.ph}</td>
-            <td>${soilData.salinity}</td>`;
+            <td>${(soilData.salinity || 0).toFixed(2)}</td>`;
         while (soilHistoryTableBody.rows.length > 25) {
             soilHistoryTableBody.deleteRow(0);
         }
