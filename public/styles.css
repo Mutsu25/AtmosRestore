@@ -527,6 +527,116 @@ footer p {
     padding-bottom: 0.3rem;
 }
 
+/* Live Feed Page Styles */
+.live-feed-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+    height: calc(100vh - 180px);
+}
+
+.video-container {
+    flex: 1;
+    background: #264034;
+    border-radius: 12px;
+    padding: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pump-controls {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    background: #264034;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.pump-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    min-width: 110px;
+    margin: 0 10px;
+}
+
+.pump-status-label {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #eafbe6;
+    margin-bottom: 6px;
+    letter-spacing: 1px;
+    text-shadow: 0 1px 4px #2f4f2f55;
+    transition: color 0.2s;
+}
+
+/* Square Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 54px;
+    height: 54px;
+    margin-bottom: 0.2rem;
+}
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #888;
+    transition: background 0.3s, box-shadow 0.3s;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px #2f4f2f33;
+    border: 2px solid #222;
+}
+input:checked + .slider {
+    background-color: #4caf50;
+    box-shadow: 0 0 8px #4caf50cc;
+}
+.slider:before {
+    position: absolute;
+    content: "";
+    left: 8px;
+    top: 8px;
+    width: 36px;
+    height: 36px;
+    background-color: #fff;
+    border-radius: 6px;
+    transition: background 0.3s;
+    box-shadow: 0 1px 4px #2f4f2f33;
+}
+input:checked + .slider:before {
+    background-color: #eafbe6;
+}
+
+.pump-label {
+    color: #8fbc8f;
+    font-size: 1.1rem;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    letter-spacing: 0.5px;
+}
+
+.pump-controls {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 20px;
+    background: #264034;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
 @media (max-width: 900px) { 
     .gauge-container {
         flex-direction: column;

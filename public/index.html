@@ -44,6 +44,7 @@
                 <li><a href="#" data-page="chartsPage">Charts</a></li>
                 <li><a href="#" data-page="soilHistoryPage">Soil Measurement History</a></li>
                 <li><a href="#" data-page="waterHistoryPage">Hydrology History</a></li>
+                <li><a href="#" data-page="liveFeedPage">Live Feed</a></li>
             </ul>
         </nav>
     </div>
@@ -258,6 +259,29 @@
                 </div>
             </section>
         </div>
+        <div id="liveFeedPage" class="page-section" style="display:none;">
+            <div class="live-feed-container">
+                <div class="video-container">
+                    <img id="rtspStream" src="http://192.168.68.101:81/stream" alt="RTSP Stream" style="width: 100%; height: auto; max-height: 70vh; object-fit: contain;">
+                </div>
+                <div class="pump-controls">
+                    <div class="pump-button">
+                        <label class="switch">
+                            <input type="checkbox" id="pump1Toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="pump-label">Pump 1</span>
+                    </div>
+                    <div class="pump-button">
+                        <label class="switch">
+                            <input type="checkbox" id="pump2Toggle">
+                            <span class="slider round"></span>
+                        </label>
+                        <span class="pump-label">Pump 2</span>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
     <footer>
         <img src="FairatmosLogo.jpg" alt="Fairatmos Logo" class="logo-footer" />
@@ -444,6 +468,41 @@
         document.getElementById(id).style.display = (id === 'metrics-' + this.value) ? 'block' : 'none';
       });
     });
+    // Pump control handlers (updated to use Firebase Cloud Function proxy)
+function setPumpState(pump, state, toggleElem) {
+    const baseUrl = 'https://us-central1-atmosrestore.cloudfunctions.net/relayProxy';
+    const secretKey = '251101';
+
+    const relay = pump === 1 ? 'relay1' : 'relay2';
+    const url = `${baseUrl}?relay=${relay}&action=${state}&key=${secretKey}`;
+
+    fetch(url)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error("Relay call failed");
+        }
+        return response.text();
+      })
+      .then(data => {
+        console.log(`Pump ${pump} ${state}:`, data);
+        document.getElementById("status").innerText = `Pump ${pump} ${state}: ${data}`;
+      })
+      .catch(err => {
+        console.error('Relay control error:', err);
+        toggleElem.checked = !toggleElem.checked;
+        alert('Failed to control pump. Please try again.');
+      });
+}
+document.getElementById('pump1Toggle').addEventListener('change', function() {
+    const state = this.checked ? 'on' : 'off';
+    setPumpState(1, state, this);
+});
+document.getElementById('pump2Toggle').addEventListener('change', function() {
+    const state = this.checked ? 'on' : 'off';
+    setPumpState(2, state, this);
+});
+    // Optionally, poll status endpoint if your ESP32 supports it
+    // function updatePumpStates() { ... }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>

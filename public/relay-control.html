@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ESP32 Relay Control</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: 'Inter', Arial, sans-serif; background: #264034; color: #eafbe6; text-align: center; padding: 2rem; }
+    h2 { color: #8fbc8f; }
+    button { background: #325947; color: #eafbe6; border: none; border-radius: 8px; padding: 1rem 2rem; margin: 0.5rem; font-size: 1.2rem; cursor: pointer; transition: background 0.2s; }
+    button:hover { background: #4caf50; color: #fff; }
+    #status { margin-top: 2rem; font-size: 1.1rem; }
+  </style>
+</head>
+<body>
+  <h2>Relay Control</h2>
+  <button onclick="toggleRelay('relay1','on')">Relay 1 ON</button>
+  <button onclick="toggleRelay('relay1','off')">Relay 1 OFF</button>
+  <br><br>
+  <button onclick="toggleRelay('relay2','on')">Relay 2 ON</button>
+  <button onclick="toggleRelay('relay2','off')">Relay 2 OFF</button>
+  <p id="status"></p>
+  <script>
+    const proxyURL = "https://us-central1-atmosrestore.cloudfunctions.net/relayProxy";
+    const secretKey = "251101";
+    function toggleRelay(relay, action) {
+      const url = `${proxyURL}?relay=${relay}&action=${action}&key=${secretKey}`;
+      fetch(url)
+        .then(res => res.text())
+        .then(txt => {
+          document.getElementById("status").innerText = "Response: " + txt;
+        })
+        .catch(err => {
+          console.error("CORS or network error:", err);
+          document.getElementById("status").innerText = "Failed: " + err.message;
+        });
+    }
+  </script>
+</body>
+</html>
