@@ -265,21 +265,22 @@
                     <img id="rtspStream" src="http://192.168.68.101:81/stream" alt="RTSP Stream" style="width: 100%; height: auto; max-height: 70vh; object-fit: contain;">
                 </div>
                 <div class="pump-controls">
-                    <div class="pump-button">
-                        <label class="switch">
+                    <div class="pump-toggle-group">
+                        <label class="pump-switch">
                             <input type="checkbox" id="pump1Toggle">
-                            <span class="slider round"></span>
+                            <span class="pump-slider"></span>
                         </label>
-                        <span class="pump-label">Pump 1</span>
+                        <span id="pump1Status" class="pump-status">Pump 1 OFF</span>
                     </div>
-                    <div class="pump-button">
-                        <label class="switch">
+                    <div class="pump-toggle-group">
+                        <label class="pump-switch">
                             <input type="checkbox" id="pump2Toggle">
-                            <span class="slider round"></span>
+                            <span class="pump-slider"></span>
                         </label>
-                        <span class="pump-label">Pump 2</span>
+                        <span id="pump2Status" class="pump-status">Pump 2 OFF</span>
                     </div>
                 </div>
+                <p id="status"></p>
             </div>
         </div>
     </div>
@@ -468,43 +469,90 @@
         document.getElementById(id).style.display = (id === 'metrics-' + this.value) ? 'block' : 'none';
       });
     });
-    // Pump control handlers (updated to use Firebase Cloud Function proxy)
+    // Pump control handlers (updated to use Firebase Realtime Database)
 function setPumpState(pump, state, toggleElem) {
-    const baseUrl = 'https://us-central1-atmosrestore.cloudfunctions.net/relayProxy';
-    const secretKey = '251101';
-
-    const relay = pump === 1 ? 'relay1' : 'relay2';
-    const url = `${baseUrl}?relay=${relay}&action=${state}&key=${secretKey}`;
-
-    fetch(url)
-      .then(response => {
-        if (!response.ok) {
-          throw new Error("Relay call failed");
-        }
-        return response.text();
-      })
-      .then(data => {
-        console.log(`Pump ${pump} ${state}:`, data);
-        document.getElementById("status").innerText = `Pump ${pump} ${state}: ${data}`;
-      })
+    const db = firebase.database();
+    db.ref("commands/" + (pump === 1 ? 'pump1' : 'pump2')).set(state)
       .catch(err => {
-        console.error('Relay control error:', err);
-        toggleElem.checked = !toggleElem.checked;
-        alert('Failed to control pump. Please try again.');
+        console.error("Failed to send command to Firebase:", err);
+        if (toggleElem) toggleElem.checked = !toggleElem.checked;
+        alert("Failed to send command to Firebase.");
       });
 }
 document.getElementById('pump1Toggle').addEventListener('change', function() {
     const state = this.checked ? 'on' : 'off';
     setPumpState(1, state, this);
+    document.getElementById('pump1Status').innerText = this.checked ? 'Pump 1 ON' : 'Pump 1 OFF';
 });
 document.getElementById('pump2Toggle').addEventListener('change', function() {
     const state = this.checked ? 'on' : 'off';
     setPumpState(2, state, this);
+    document.getElementById('pump2Status').innerText = this.checked ? 'Pump 2 ON' : 'Pump 2 OFF';
 });
-    // Optionally, poll status endpoint if your ESP32 supports it
-    // function updatePumpStates() { ... }
     </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
+    <style>
+.pump-controls {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+.pump-toggle-group {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.pump-label {
+  margin-top: 0.7rem;
+  font-size: 1.1rem;
+  color: #eafbe6;
+  font-weight: 600;
+}
+.pump-switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+.pump-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+.pump-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: #888;
+  transition: .4s;
+  border-radius: 34px;
+}
+.pump-slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: #fff;
+  transition: .4s;
+  border-radius: 50%;
+}
+.pump-switch input:checked + .pump-slider {
+  background-color: #4caf50;
+}
+.pump-switch input:checked + .pump-slider:before {
+  transform: translateX(26px);
+}
+.pump-status {
+  margin-top: 0.5rem;
+  font-size: 1.1rem;
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+</style>
 </body>
 </html>
