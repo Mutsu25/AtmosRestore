@@ -346,6 +346,14 @@
                 document.querySelector('.header').style.display = '';
                 document.querySelector('.container').style.display = '';
                 document.querySelector('footer').style.display = '';
+                // --- FIX: Re-initialize gauges and fetch data after login ---
+                if (window.initGaugesAndData) {
+                  window.initGaugesAndData();
+                } else if (typeof app !== 'undefined' && app.init) {
+                  app.init();
+                } else if (typeof initializeGauges === 'function') {
+                  initializeGauges();
+                }
             } else {
                 loginPage.style.display = 'flex';
                 document.querySelector('.header').style.display = 'none';
