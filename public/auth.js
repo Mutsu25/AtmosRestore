@@ -57,6 +57,16 @@ export function initAuth() {
             if (footer) footer.style.display = '';
             // Add logout button if not present
             addLogoutButton();
+            // Initialize soil gauges only after login
+            try {
+                if (window.initSoilGauges) window.initSoilGauges();
+                else import('./soilGauges.js').then(mod => mod.initSoilGauges && mod.initSoilGauges()).catch(() => {});
+            } catch (e) {}
+            // Initialize history tables only after login
+            try {
+                if (window.initHistory) window.initHistory();
+                else import('./history.js').then(mod => mod.initHistory && mod.initHistory()).catch(() => {});
+            } catch (e) {}
         } else {
             if (dashboardContainer) dashboardContainer.style.display = 'none';
             if (header) header.style.display = 'none';

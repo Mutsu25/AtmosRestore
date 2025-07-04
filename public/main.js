@@ -13,7 +13,7 @@ import { initLiveFeed } from './liveFeed.js';
 document.addEventListener('DOMContentLoaded', () => {
     initAuth();
     initNavigation();
-    initSoilGauges();
+    // initSoilGauges(); // Moved to auth.js after login
     initHydrologyGauges();
     initCharts();
     initHistory();

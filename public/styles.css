@@ -688,6 +688,26 @@ input:checked + .slider:before {
     box-shadow: 0 4px 16px #2f4f2f55;
 }
 
+/* Custom Scrollbar Styling */
+body, html, .container, .gauge-container, .gauge-group, .history-section, .history-cards-wrapper, .history-table-wrapper, .table-container {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(255,255,255,0.25) rgba(255,255,255,0.05);
+}
+
+/* Chrome, Edge, Safari */
+body::-webkit-scrollbar, .container::-webkit-scrollbar, .gauge-container::-webkit-scrollbar, .gauge-group::-webkit-scrollbar, .history-section::-webkit-scrollbar, .history-cards-wrapper::-webkit-scrollbar, .history-table-wrapper::-webkit-scrollbar, .table-container::-webkit-scrollbar {
+    width: 6px;
+    background: rgba(255,255,255,0.05);
+}
+body::-webkit-scrollbar-thumb, .container::-webkit-scrollbar-thumb, .gauge-container::-webkit-scrollbar-thumb, .gauge-group::-webkit-scrollbar-thumb, .history-section::-webkit-scrollbar-thumb, .history-cards-wrapper::-webkit-scrollbar-thumb, .history-table-wrapper::-webkit-scrollbar-thumb, .table-container::-webkit-scrollbar-thumb {
+    background: rgba(255,255,255,0.25);
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.10);
+}
+body::-webkit-scrollbar-thumb:hover, .container::-webkit-scrollbar-thumb:hover, .gauge-container::-webkit-scrollbar-thumb:hover, .gauge-group::-webkit-scrollbar-thumb:hover, .history-section::-webkit-scrollbar-thumb:hover, .history-cards-wrapper::-webkit-scrollbar-thumb:hover, .history-table-wrapper::-webkit-scrollbar-thumb:hover, .table-container::-webkit-scrollbar-thumb:hover {
+    background: rgba(255,255,255,0.35);
+}
+
 @media (max-width: 900px) { 
     .gauge-container {
         flex-direction: column;
