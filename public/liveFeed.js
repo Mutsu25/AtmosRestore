@@ -122,46 +122,54 @@ export function initLiveFeed() {
     }
 
     // --- Pump Logic ---
-    // Remove pump status text updates for aesthetics
-    /*
-    function updatePumpStatus(pump, isOn) {
-        if (pump === 1 && pump1Status) {
-            pump1Status.textContent = isOn ? 'Pump 1 ON' : 'Pump 1 OFF';
-            pump1Status.style.color = isOn ? '#4caf50' : '#eafbe6';
-        }
-        if (pump === 2 && pump2Status) {
-            pump2Status.textContent = isOn ? 'Pump 2 ON' : 'Pump 2 OFF';
-            pump2Status.style.color = isOn ? '#4caf50' : '#eafbe6';
-        }
-    }
-    */
     // Optionally hide the status elements if present
     if (pump1Status) pump1Status.style.display = 'none';
     if (pump2Status) pump2Status.style.display = 'none';
 
+    // Disable pump toggles until authenticated
+    if (pump1Toggle) pump1Toggle.disabled = true;
+    if (pump2Toggle) pump2Toggle.disabled = true;
+
+    // Listen for auth state changes
+    if (window.firebase && window.firebase.auth) {
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                // Enable toggles when logged in
+                if (pump1Toggle) pump1Toggle.disabled = false;
+                if (pump2Toggle) pump2Toggle.disabled = false;
+            } else {
+                // Disable toggles when logged out
+                if (pump1Toggle) pump1Toggle.disabled = true;
+                if (pump2Toggle) pump2Toggle.disabled = true;
+            }
+        });
+    }
+
     if (window.firebase && window.firebase.database) {
-        firebase.database().ref('/pump/pump1').on('value', function(snapshot) {
+        firebase.database().ref('/commands/pump1').on('value', function(snapshot) {
             const isOn = snapshot.val() === true || snapshot.val() === 'on';
             if (pump1Toggle) pump1Toggle.checked = isOn;
-            // updatePumpStatus(1, isOn); // No longer needed
         });
-        firebase.database().ref('/pump/pump2').on('value', function(snapshot) {
+        firebase.database().ref('/commands/pump2').on('value', function(snapshot) {
             const isOn = snapshot.val() === true || snapshot.val() === 'on';
             if (pump2Toggle) pump2Toggle.checked = isOn;
-            // updatePumpStatus(2, isOn); // No longer needed
         });
     }
     if (pump1Toggle) {
         pump1Toggle.addEventListener('change', function() {
-            if (window.firebase && window.firebase.database) {
-                firebase.database().ref('/pump/pump1').set(pump1Toggle.checked ? 'on' : 'off');
+            // Only allow if authenticated
+            const user = firebase.auth().currentUser;
+            if (user && window.firebase && window.firebase.database) {
+                firebase.database().ref('/commands/pump1').set(pump1Toggle.checked ? 'on' : 'off');
             }
         });
     }
     if (pump2Toggle) {
         pump2Toggle.addEventListener('change', function() {
-            if (window.firebase && window.firebase.database) {
-                firebase.database().ref('/pump/pump2').set(pump2Toggle.checked ? 'on' : 'off');
+            // Only allow if authenticated
+            const user = firebase.auth().currentUser;
+            if (user && window.firebase && window.firebase.database) {
+                firebase.database().ref('/commands/pump2').set(pump2Toggle.checked ? 'on' : 'off');
             }
         });
     }
