@@ -285,8 +285,8 @@ footer p {
 }
 
 .hamburger-menu {
-    width: 40px;
-    height: 40px;
+    width: 44px;
+    height: 44px;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -294,15 +294,36 @@ footer p {
     cursor: pointer;
     margin-left: 1rem;
     z-index: 1001;
+    background: rgba(50, 89, 71, 0.92);
+    border-radius: 12px;
+    box-shadow: 0 2px 8px #2f4f2f33;
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    border: 2px solid #264034;
+    position: relative;
+}
+.hamburger-menu:hover, .hamburger-menu.active {
+    background: linear-gradient(135deg, #406d5a 80%, #325947 100%);
+    box-shadow: 0 4px 16px #2f4f2f55;
+    transform: scale(1.06) rotate(-2deg);
 }
 .hamburger-menu span {
     display: block;
-    width: 28px;
+    width: 26px;
     height: 4px;
     margin: 4px 0;
-    background: #f0f4f1;
-    border-radius: 2px;
-    transition: 0.3s;
+    background: #eafbe6;
+    border-radius: 3px;
+    box-shadow: 0 1px 4px #2f4f2f33;
+    transition: all 0.3s cubic-bezier(.4,2,.6,1), background 0.2s;
+}
+.hamburger-menu.active span:nth-child(1) {
+    transform: translateY(8px) rotate(45deg);
+}
+.hamburger-menu.active span:nth-child(2) {
+    opacity: 0;
+}
+.hamburger-menu.active span:nth-child(3) {
+    transform: translateY(-8px) rotate(-45deg);
 }
 
 .nav-drawer {
@@ -620,11 +641,16 @@ input:checked + .slider:before {
 }
 
 .pump-label {
+    font-family: 'Inter', Arial, sans-serif;
     color: #8fbc8f;
     font-size: 1.1rem;
     font-weight: 600;
     margin-top: 0.2rem;
     letter-spacing: 0.5px;
+    text-shadow: 0 1px 4px #2f4f2f55;
+    transition: color 0.2s;
+    display: block;
+    text-align: center;
 }
 
 .pump-controls {
@@ -635,6 +661,31 @@ input:checked + .slider:before {
     background: #264034;
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.logout-btn {
+    background: linear-gradient(135deg, #325947 80%, #406d5a 100%);
+    color: #eafbe6;
+    border: none;
+    border-radius: 10px;
+    padding: 0.55rem 1.3rem;
+    font-size: 1.05rem;
+    font-family: 'Inter', Arial, sans-serif;
+    font-weight: 600;
+    margin-left: 1.2rem;
+    box-shadow: 0 2px 8px #2f4f2f33;
+    cursor: pointer;
+    transition: background 0.2s, box-shadow 0.2s, color 0.2s;
+    outline: none;
+    letter-spacing: 0.5px;
+    position: relative;
+    top: 0;
+    right: 0;
+}
+.logout-btn:hover, .logout-btn:focus {
+    background: linear-gradient(135deg, #406d5a 80%, #325947 100%);
+    color: #fff;
+    box-shadow: 0 4px 16px #2f4f2f55;
 }
 
 @media (max-width: 900px) { 

@@ -266,6 +266,7 @@
                 </div>
                 <div class="pump-controls">
                     <div class="pump-toggle-group">
+                        <span class="pump-label">Pump 1</span>
                         <label class="pump-switch">
                             <input type="checkbox" id="pump1Toggle">
                             <span class="pump-slider"></span>
@@ -273,6 +274,7 @@
                         <span id="pump1Status" class="pump-status">Pump 1 OFF</span>
                     </div>
                     <div class="pump-toggle-group">
+                        <span class="pump-label">Pump 2</span>
                         <label class="pump-switch">
                             <input type="checkbox" id="pump2Toggle">
                             <span class="pump-slider"></span>
@@ -297,6 +299,8 @@
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
     <script>
       var firebaseConfig = {
         apiKey: "AIzaSyCXCop2CFFVKHwTDC7IAzk1qx-7SbZAclo",
@@ -310,257 +314,6 @@
       };
       firebase.initializeApp(firebaseConfig);
     </script>
-    <script src="app.js"></script>
-    <script>
-    // Hamburger menu toggle
-    const hamburgerMenu = document.getElementById('hamburgerMenu');
-    const navDrawer = document.getElementById('navDrawer');
-    hamburgerMenu.onclick = function() {
-        navDrawer.classList.toggle('open');
-    };
-    // Page navigation
-    const pageLinks = document.querySelectorAll('.nav-drawer a');
-    const sections = document.querySelectorAll('.page-section');
-    pageLinks.forEach(link => {
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
-            const page = this.getAttribute('data-page');
-            sections.forEach(sec => sec.style.display = 'none');
-            document.getElementById(page).style.display = '';
-            navDrawer.classList.remove('open');
-        });
-    });
-    // Firebase Auth login logic
-    document.addEventListener('DOMContentLoaded', function() {
-        const loginPage = document.getElementById('loginPage');
-        const loginForm = document.getElementById('loginForm');
-        const loginError = document.getElementById('loginError');
-        // Hide dashboard until login
-        document.querySelector('.header').style.display = 'none';
-        document.querySelector('.container').style.display = 'none';
-        document.querySelector('footer').style.display = 'none';
-        // Check auth state
-        firebase.auth().onAuthStateChanged(function(user) {
-            if (user) {
-                loginPage.style.display = 'none';
-                document.querySelector('.header').style.display = '';
-                document.querySelector('.container').style.display = '';
-                document.querySelector('footer').style.display = '';
-                // --- FIX: Re-initialize gauges and fetch data after login ---
-                if (window.initGaugesAndData) {
-                  window.initGaugesAndData();
-                } else if (typeof app !== 'undefined' && app.init) {
-                  app.init();
-                } else if (typeof initializeGauges === 'function') {
-                  initializeGauges();
-                }
-            } else {
-                loginPage.style.display = 'flex';
-                document.querySelector('.header').style.display = 'none';
-                document.querySelector('.container').style.display = 'none';
-                document.querySelector('footer').style.display = 'none';
-            }
-        });
-        // Login form submit
-        loginForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            firebase.auth().signInWithEmailAndPassword(email, password)
-                .then(() => { loginError.textContent = ''; })
-                .catch(err => { loginError.textContent = err.message; });
-        });
-    });
-    document.getElementById('exportSoilHistoryPDF').addEventListener('click', function() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text('Soil Metrics History', 14, 16);
-        doc.autoTable({
-            html: '#historyTableSoil',
-            startY: 22,
-            styles: {
-                font: 'helvetica',
-                fontSize: 10,
-                cellPadding: 2,
-                textColor: [34, 65, 58],
-                fillColor: [234, 251, 230],
-            },
-            headStyles: {
-                fillColor: [50, 89, 71],
-                textColor: [234, 251, 230],
-            },
-            alternateRowStyles: {
-                fillColor: [61, 92, 71],
-                textColor: [234, 251, 230],
-            },
-            margin: { left: 14, right: 14 }
-        });
-        doc.save('soil_metrics_history.pdf');
-    });
-    document.getElementById('exportWaterHistoryPDF').addEventListener('click', function() {
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-        doc.text('Water & Tide Metrics History', 14, 16);
-        doc.autoTable({
-            html: '#historyTableWater',
-            startY: 22,
-            styles: {
-                font: 'helvetica',
-                fontSize: 10,
-                cellPadding: 2,
-                textColor: [34, 65, 58],
-                fillColor: [234, 251, 230],
-            },
-            headStyles: {
-                fillColor: [50, 89, 71],
-                textColor: [234, 251, 230],
-            },
-            alternateRowStyles: {
-                fillColor: [61, 92, 71],
-                textColor: [234, 251, 230],
-            },
-            margin: { left: 14, right: 14 }
-        });
-        doc.save('water_tide_metrics_history.pdf');
-    });
-    document.getElementById('exportSoilHistoryCSV').addEventListener('click', function() {
-        // Convert HTML table to CSV
-        const csv = [];
-        const rows = document.querySelectorAll('#historyTableSoil tr');
-        rows.forEach(row => {
-            const cols = row.querySelectorAll('td, th');
-            const csvRow = [];
-            cols.forEach(col => csvRow.push(col.innerText));
-            csv.push(csvRow.join(','));
-        });
-        const csvString = csv.join('\n');
-        // Download CSV file
-        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'soil_metrics_history.csv');
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-    document.getElementById('exportWaterHistoryCSV').addEventListener('click', function() {
-        // Convert HTML table to CSV
-        const csv = [];
-        const rows = document.querySelectorAll('#historyTableWater tr');
-        rows.forEach(row => {
-            const cols = row.querySelectorAll('td, th');
-            const csvRow = [];
-            cols.forEach(col => csvRow.push(col.innerText));
-            csv.push(csvRow.join(','));
-        });
-        const csvString = csv.join('\n');
-        // Download CSV file
-        const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.setAttribute('href', url);
-        a.setAttribute('download', 'water_tide_metrics_history.csv');
-        a.click();
-        URL.revokeObjectURL(url);
-    });
-    // Auto-switch optimal species metrics template
-    const speciesSelect = document.getElementById('speciesSelect');
-    const speciesTemplates = [
-      'metrics-mucronata',
-      'metrics-apiculata',
-      'metrics-stylosa',
-      'metrics-avicennia',
-      'metrics-bruguiera'
-    ];
-    speciesSelect.addEventListener('change', function() {
-      speciesTemplates.forEach(id => {
-        document.getElementById(id).style.display = (id === 'metrics-' + this.value) ? 'block' : 'none';
-      });
-    });
-    // Pump control handlers (updated to use Firebase Realtime Database)
-function setPumpState(pump, state, toggleElem) {
-    const db = firebase.database();
-    db.ref("commands/" + (pump === 1 ? 'pump1' : 'pump2')).set(state)
-      .catch(err => {
-        console.error("Failed to send command to Firebase:", err);
-        if (toggleElem) toggleElem.checked = !toggleElem.checked;
-        alert("Failed to send command to Firebase.");
-      });
-}
-document.getElementById('pump1Toggle').addEventListener('change', function() {
-    const state = this.checked ? 'on' : 'off';
-    setPumpState(1, state, this);
-    document.getElementById('pump1Status').innerText = this.checked ? 'Pump 1 ON' : 'Pump 1 OFF';
-});
-document.getElementById('pump2Toggle').addEventListener('change', function() {
-    const state = this.checked ? 'on' : 'off';
-    setPumpState(2, state, this);
-    document.getElementById('pump2Status').innerText = this.checked ? 'Pump 2 ON' : 'Pump 2 OFF';
-});
-    </script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.7.0/jspdf.plugin.autotable.min.js"></script>
-    <style>
-.pump-controls {
-  display: flex;
-  gap: 2rem;
-  justify-content: center;
-  margin-top: 1.5rem;
-}
-.pump-toggle-group {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-.pump-label {
-  margin-top: 0.7rem;
-  font-size: 1.1rem;
-  color: #eafbe6;
-  font-weight: 600;
-}
-.pump-switch {
-  position: relative;
-  display: inline-block;
-  width: 60px;
-  height: 34px;
-}
-.pump-switch input {
-  opacity: 0;
-  width: 0;
-  height: 0;
-}
-.pump-slider {
-  position: absolute;
-  cursor: pointer;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background-color: #888;
-  transition: .4s;
-  border-radius: 34px;
-}
-.pump-slider:before {
-  position: absolute;
-  content: "";
-  height: 26px;
-  width: 26px;
-  left: 4px;
-  bottom: 4px;
-  background-color: #fff;
-  transition: .4s;
-  border-radius: 50%;
-}
-.pump-switch input:checked + .pump-slider {
-  background-color: #4caf50;
-}
-.pump-switch input:checked + .pump-slider:before {
-  transform: translateX(26px);
-}
-.pump-status {
-  margin-top: 0.5rem;
-  font-size: 1.1rem;
-  color: #fff;
-  font-weight: bold;
-  letter-spacing: 1px;
-}
-</style>
+    <script type="module" src="main.js"></script>
 </body>
 </html>
