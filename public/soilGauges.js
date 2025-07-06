@@ -86,6 +86,8 @@ export function initSoilGauges() {
         levelColors: ["#a0522d", "#deb887", "#4caf50"]
     });
 
+    window.soilData = soilData; // Expose soilData globally for other modules
+
     // Set up Firebase listeners for each metric
     if (window.firebase && window.firebase.database) {
         firebase.database().ref('/sensor/moisture').on('value', function(snapshot) {
