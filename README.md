@@ -1,59 +1,99 @@
 # AtmosRestore Dashboard
 
-Welcome to the AtmosRestore Dashboard! This project is a modern, interactive web dashboard for real-time monitoring and control of soil and hydrology sensors, designed for environmental restoration and research projects.
+AtmosRestore is a prototype dashboard for in-house soil and water assessment tools, designed to monitor, visualize, and control environmental parameters for mangrove restoration projects. The dashboard integrates real-time sensor data, historical trends, and remote device control (such as pumps and relays) using Firebase and ESP32 microcontrollers.
 
 ## Features
 
-- **Authentication:** Secure login/logout with Firebase Auth. Dashboard is hidden until login.
-- **Navigation:** Sleek hamburger menu and navigation drawer for switching between dashboard sections.
-- **Real-time Gauges:** Live soil and hydrology gauges (moisture, humidity, temperature, pH, salinity, flooding, tide, velocity) with animated visuals.
-- **Live Feed & Pump Control:** View live RTSP video stream and control water pumps in real time via Firebase.
-- **Trend Charts:** Interactive Chart.js graphs for all metrics, with dropdown to select trends.
-- **History Tables:** Real-time updating tables for soil and water history, with CSV and PDF export (jsPDF/AutoTable integration).
-- **Species Metrics:** Dropdown to view optimal metrics for different mangrove species.
-- **Responsive Design:** Clean, nature-inspired UI with mangrove background, modern fonts, and smooth animations. Fully responsive for desktop and mobile.
-- **PWA Support:** Includes a web manifest for installable Progressive Web App experience.
-
-## Technology Stack
-
-- HTML, CSS, JavaScript (ES6 modules)
-- [JustGage](https://justgage.com/) for animated gauges
-- [Chart.js](https://www.chartjs.org/) for charts
-- [Firebase Realtime Database & Auth](https://firebase.google.com/)
-- [jsPDF](https://github.com/parallax/jsPDF) & [jsPDF-AutoTable](https://github.com/simonbengtsson/jsPDF-AutoTable) for PDF export
-- Google Fonts (Inter)
-
-## Getting Started
-
-1. **Clone or download this repository.**
-2. **Firebase Setup:**
-   - Create a Firebase project at [firebase.google.com](https://firebase.google.com/).
-   - Enable **Realtime Database** and **Authentication (Email/Password)**.
-   - Replace the Firebase config in `public/index.html` with your own project credentials.
-   - Set up your database structure as needed (see `/pump/pump1`, `/pump/pump2`, `/soilHistory`, `/waterHistory` in the code).
-3. **Run the Dashboard:**
-   - Open `public/index.html` in a modern web browser (Chrome/Edge/Firefox recommended).
-   - Log in with a registered Firebase Auth user.
-   - All features (gauges, charts, history, live feed, pump control) will work in real time if your Firebase is set up.
+- **User Authentication**: Secure login for dashboard access.
+- **Real-Time Gauges**: Live display of soil and hydrology metrics (moisture, humidity, temperature, pH, salinity, flooding, tide, etc.).
+- **Historical Data**: View and export historical soil and water measurements as PDF or CSV.
+- **Charts & Trends**: Visualize trends for all key metrics using interactive charts.
+- **Optimal Species Metrics**: Reference optimal environmental ranges for various mangrove species.
+- **Live Feed**: (Planned) Integration for live RTSP video stream from the field.
+- **Remote Device Control**: Control relays and pumps remotely via the dashboard, with commands routed through Firebase Cloud Functions to ESP32 devices.
 
 ## Project Structure
 
-- `public/index.html` - Main dashboard HTML page
-- `public/styles.css` - Dashboard styling
-- `public/soilGauges.js`, `hydrologyGauges.js`, `charts.js`, `history.js`, `speciesMetrics.js`, `navigation.js`, `auth.js`, `liveFeed.js`, `main.js` - Modular JavaScript for each dashboard section
-- `public/FairatmosLogo.jpg`, `public/Mangrove.jpg` - Branding and background
-- `public/site.webmanifest` - PWA manifest
+```
+AtmosRestore/
+├── firebase.json
+├── README.md
+├── favicon_io/           # Favicon and icon assets
+├── functions/            # Firebase Cloud Functions (relay proxy, backend logic)
+│   ├── index.js
+│   └── package.json
+├── public/               # Main dashboard frontend
+│   ├── app.js
+│   ├── auth.js
+│   ├── charts.js
+│   ├── history.js
+│   ├── hydrologyGauges.js
+│   ├── index.html        # Main dashboard UI
+│   ├── liveFeed.js
+│   ├── main.js           # Main JS logic (Firebase, UI, controls)
+│   ├── navigation.js
+│   ├── relay-control.html# Standalone relay control page
+│   ├── soilGauges.js
+│   ├── speciesMetrics.js
+│   ├── styles.css
+│   └── ... (images, manifest, etc.)
+└── Soil Assesment Prototype/
+    └── public/           # (Legacy or prototype files)
+```
 
-## Requirements
+## Setup & Deployment
 
-- Modern web browser (with ES6 module support)
-- Firebase project with Realtime Database and Auth enabled
-- Internet connection for CDN libraries (JustGage, Chart.js, jsPDF, Firebase, etc.)
+### Prerequisites
+- Node.js & npm
+- Firebase CLI (`npm install -g firebase-tools`)
+- A Firebase project (Realtime Database enabled)
+- ESP32 devices with firmware to read/write Firebase and receive relay/pump commands
+
+### 1. Clone the Repository
+```sh
+git clone <your-repo-url>
+cd AtmosRestore
+```
+
+### 2. Install Firebase Functions Dependencies
+```sh
+cd functions
+npm install
+```
+
+### 3. Configure Firebase
+- Update `firebase.json` and `public/index.html` with your Firebase project credentials if needed.
+- Initialize Firebase in your project:
+```sh
+firebase login
+firebase use --add
+```
+
+### 4. Deploy Cloud Functions & Hosting
+```sh
+firebase deploy --only functions,hosting
+```
+
+### 5. ESP32 Setup
+- Flash your ESP32 with firmware that connects to your Wi-Fi and Firebase Realtime Database.
+- Ensure it listens for relay/pump commands and updates its state in Firebase.
+
+### 6. Access the Dashboard
+- Open the hosted URL provided by Firebase Hosting.
+- Login with your credentials to access the dashboard.
+
+## File Descriptions
+
+- `public/index.html`: Main dashboard UI.
+- `public/main.js`: Handles Firebase integration, UI logic, and device control.
+- `public/relay-control.html`: Standalone page for direct relay control.
+- `functions/index.js`: Firebase Cloud Functions (relay proxy, backend logic).
+- `public/styles.css`: Dashboard styling.
+
+## Notes
+- The dashboard expects ESP32 devices to be online and connected for real-time control and state updates.
+- Live video feed is currently disabled; enable when RTSP stream is available.
+- For security, never expose secret keys or sensitive credentials in public repositories.
 
 ## License
-
-This project is open source and available under the MIT License.
-
----
-
-Enjoy monitoring and controlling your restoration site with the AtmosRestore Dashboard!
+This project is for prototype and demonstration purposes. Please contact the project owner for licensing details.
